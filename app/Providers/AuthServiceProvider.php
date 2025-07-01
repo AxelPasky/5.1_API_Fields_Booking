@@ -2,11 +2,12 @@
 
 namespace App\Providers;
 
-use App\Models\Booking; // Importa Booking
+use App\Models\Booking;
 use App\Models\Field;
-use App\Policies\BookingPolicy; // Importa BookingPolicy
+use App\Policies\BookingPolicy;
 use App\Policies\FieldPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -16,8 +17,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy', // Esempio originale
-        Booking::class => BookingPolicy::class, // Aggiungi questa riga
+        Booking::class => BookingPolicy::class,
         Field::class => FieldPolicy::class,
     ];
 
@@ -28,6 +28,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Passport::routes();
     }
 }

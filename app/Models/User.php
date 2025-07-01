@@ -6,11 +6,12 @@ use Illuminate\Contracts\Auth\MustVerifyEmail; // <-- 1. Decommenta questa riga
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens; // <-- Aggiungi questa riga
 
 class User extends Authenticatable implements MustVerifyEmail // <-- 2. Aggiungi "implements MustVerifyEmail"
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens; // <-- Aggiungi HasApiTokens qui
 
     /**
      * The attributes that are mass assignable.
