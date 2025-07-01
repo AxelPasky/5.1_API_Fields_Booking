@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail; // <-- 1. Decommenta questa riga
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Passport\HasApiTokens; // <-- Aggiungi questa riga
+use Laravel\Passport\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements MustVerifyEmail // <-- 2. Aggiungi "implements MustVerifyEmail"
+class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens; // <-- Aggiungi HasApiTokens qui
+    use HasFactory, Notifiable, HasApiTokens, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail // <-- 2. Aggiungi
         'name',
         'email',
         'password',
-        'is_admin', 
+        'is_admin',
     ];
 
     /**
@@ -45,7 +45,7 @@ class User extends Authenticatable implements MustVerifyEmail // <-- 2. Aggiungi
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'is_admin' => 'boolean', 
+            'is_admin' => 'boolean',
         ];
     }
 
