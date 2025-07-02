@@ -3,41 +3,37 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $credentials = $request->validate([
+        $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+        // Cerca l'utente tramite email
+        $user = User::where('email', $request->email)->first();
+
+        // Verifica che l'utente esista e che la password sia corretta
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['Le credenziali fornite non sono corrette.'],
+            ]);
         }
 
-        // Crea una nuova richiesta interna al server OAuth per ottenere il token
-        $tokenRequest = Request::create(
-            'oauth/token',
-            'POST',
-            [
-                'grant_type' => 'password',
-                'client_id' => env('PASSPORT_PASSWORD_GRANT_CLIENT_ID'),
-                'client_secret' => env('PASSPORT_PASSWORD_GRANT_CLIENT_SECRET'),
-                'username' => $credentials['email'],
-                'password' => $credentials['password'],
-                'scope' => '',
-            ]
-        );
+        // Se le credenziali sono corrette, crea e restituisce il token
+        $token = $user->createToken('auth-token')->accessToken;
 
-        // Esegui la richiesta e ottieni la risposta
-        $response = Route::dispatch($tokenRequest);
-
-        // Restituisci la risposta JSON (che contiene access_token, expires_in, ecc.)
-        return $response;
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+        ]);
     }
 }
