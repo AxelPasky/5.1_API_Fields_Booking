@@ -23,9 +23,8 @@ class AuthController extends Controller
 
         // Verifica che l'utente esista e che la password sia corretta
         if (! $user || ! Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['Le credenziali fornite non sono corrette.'],
-            ]);
+            // Invece di lanciare un'eccezione, restituisci una risposta 401
+            return response()->json(['message' => 'Le credenziali fornite non sono corrette.'], 401);
         }
 
         // Se le credenziali sono corrette, crea e restituisce il token
