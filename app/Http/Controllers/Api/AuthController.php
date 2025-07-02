@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 class AuthController extends Controller
 {
@@ -15,19 +16,28 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        // Tenta di autenticare l'utente
         if (!Auth::attempt($credentials)) {
-            // Se le credenziali non sono valide, restituisce 401 Unauthorized
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        // Se l'autenticazione ha successo, crea e restituisce il token
-        $user = $request->user();
-        $token = $user->createToken('auth-token')->accessToken;
+        // Crea una nuova richiesta interna al server OAuth per ottenere il token
+        $tokenRequest = Request::create(
+            'oauth/token',
+            'POST',
+            [
+                'grant_type' => 'password',
+                'client_id' => env('PASSPORT_PASSWORD_GRANT_CLIENT_ID'),
+                'client_secret' => env('PASSPORT_PASSWORD_GRANT_CLIENT_SECRET'),
+                'username' => $credentials['email'],
+                'password' => $credentials['password'],
+                'scope' => '',
+            ]
+        );
 
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-        ]);
+        // Esegui la richiesta e ottieni la risposta
+        $response = Route::dispatch($tokenRequest);
+
+        // Restituisci la risposta JSON (che contiene access_token, expires_in, ecc.)
+        return $response;
     }
 }
