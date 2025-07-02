@@ -9,7 +9,14 @@ use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
-    use RefreshDatabase; // Esegue migrate:fresh --seed prima di ogni test
+    use RefreshDatabase;
+
+    /**
+     * Indica se il seeder predefinito deve essere eseguito prima di ogni test.
+     *
+     * @var bool
+     */
+    protected $seed = true;
 
     /**
      * A basic feature test example.

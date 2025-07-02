@@ -19,10 +19,10 @@ class PassportSeeder extends Seeder
         DB::table('oauth_clients')->insert([
             'id' => env('PASSPORT_PERSONAL_ACCESS_CLIENT_ID'),
             'name' => 'Personal Access Client',
-            'secret' => env('PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET'), // Inserisce il secret così com'è dal .env
+            'secret' => 'dummy-secret-for-personal-client', // Secret in chiaro
             'provider' => 'users',
             'redirect_uris' => '[]',
-            'grant_types' => '["personal_access"]', // <-- CORREZIONE CHIAVE
+            'grant_types' => '["personal_access"]',
             'revoked' => 0,
             'created_at' => now(),
             'updated_at' => now(),
@@ -32,10 +32,10 @@ class PassportSeeder extends Seeder
         DB::table('oauth_clients')->insert([
             'id' => env('PASSPORT_PASSWORD_GRANT_CLIENT_ID'),
             'name' => 'Password Grant Client',
-            'secret' => env('PASSPORT_PASSWORD_GRANT_CLIENT_SECRET'), // Inserisce il secret così com'è dal .env
+            'secret' => env('PASSPORT_PASSWORD_GRANT_CLIENT_SECRET'), // <-- Usiamo un secret in chiaro
             'provider' => 'users',
             'redirect_uris' => '[]',
-            'grant_types' => '["password", "refresh_token"]', // <-- CORREZIONE CHIAVE
+            'grant_types' => '["password", "refresh_token"]',
             'revoked' => 0,
             'created_at' => now(),
             'updated_at' => now(),

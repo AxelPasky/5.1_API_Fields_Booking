@@ -29,10 +29,13 @@
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
-        
+
+        <!-- INIZIO MODIFICA -->
         <env name="PASSPORT_PERSONAL_ACCESS_CLIENT_ID" value="0197cb7d-5b48-716d-9941-0ae40d990588"/>
-        <env name="PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET" value="$2y$12$dqYodEjcjMeC/QDKP49ReexXF8VyNdJbKpyxLVjr31b17axhGQpO."/>
+        <env name="PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET" value="dummy-secret-for-personal-client"/>
         <env name="PASSPORT_PASSWORD_GRANT_CLIENT_ID" value="0197cb7f-ed1c-7132-ba9f-6077980ee402"/>
-        <env name="PASSPORT_PASSWORD_GRANT_CLIENT_SECRET" value="$2y$12$chNEaj2HnwmNT/8Wq6Dwu.2pRVW57SUoglxcEJT8FhIKuDEKrWDPy"/>
+        <env name="PASSPORT_PASSWORD_GRANT_CLIENT_SECRET" value="my-super-secret-password-grant-client-secret"/>
+        <!-- FINE MODIFICA -->
+
     </php>
 </phpunit>
