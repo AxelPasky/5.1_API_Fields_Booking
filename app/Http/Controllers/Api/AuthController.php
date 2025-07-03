@@ -65,4 +65,12 @@ class AuthController extends Controller
             'token_type' => 'Bearer',
         ], 201);
     }
+
+    public function logout(Request $request)
+    {
+        // Revoca il token di accesso corrente
+        $request->user()->token()->revoke();
+
+        return response()->json(['message' => 'Logged out successfully']);
+    }
 }
