@@ -23,8 +23,7 @@ Route::post('/register', [AuthController::class, 'register']);
 
 // Rotte protette che richiedono autenticazione
 Route::middleware('auth:api')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+    Route::get('/user', [AuthController::class, 'user']);
+
     Route::post('/logout', [AuthController::class, 'logout']);
 });

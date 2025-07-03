@@ -93,4 +93,24 @@ class AuthTest extends TestCase
             'revoked' => true,
         ]);
     }
+
+    /** @test */
+    public function an_authenticated_user_can_fetch_their_details()
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $token = $user->createToken('auth-token')->accessToken;
+
+        // Act
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->getJson('/api/user');
+
+        // Assert
+        $response->assertStatus(200);
+        $response->assertJson([
+            'id' => $user->id,
+            'email' => $user->email,
+        ]);
+    }
 }
