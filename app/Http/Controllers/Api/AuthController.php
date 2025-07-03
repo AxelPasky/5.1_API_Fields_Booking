@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rules;
 
 class AuthController extends Controller
 {
@@ -34,5 +35,34 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'Bearer',
         ]);
+    }
+
+    public function register(Request $request)
+    {
+        // 1. Valida i dati in ingresso
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        // 2. Crea il nuovo utente
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        // Assegna il ruolo di default 'User'
+        $user->assignRole('User');
+
+        // 3. Crea un token di accesso per il nuovo utente
+        $token = $user->createToken('auth-token')->accessToken;
+
+        // 4. Restituisci la risposta con il token e lo stato 201
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+        ], 201);
     }
 }
