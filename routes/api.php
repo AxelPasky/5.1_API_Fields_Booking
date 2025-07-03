@@ -18,6 +18,9 @@ use App\Http\Controllers\Api\AuthController;
 // Rotta di login che punta al nostro controller
 Route::post('/login', [AuthController::class, 'login']);
 
+// Rotta di registrazione che punta al nostro controller
+Route::post('/register', [AuthController::class, 'register']);
+
 // Esempio di rotta protetta
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
