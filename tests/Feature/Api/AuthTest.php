@@ -70,4 +70,27 @@ class AuthTest extends TestCase
         $response->assertStatus(401); // Unauthorized
         $this->assertGuest('api');
     }
+
+    /** @test */
+    public function a_logged_in_user_can_logout()
+    {
+        // 1. Arrange: Creiamo e autentichiamo un utente
+        $user = User::factory()->create();
+        $token = $user->createToken('auth-token')->accessToken;
+
+        // 2. Act: Eseguiamo la chiamata API per il logout
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->postJson('/api/logout');
+
+        // 3. Assert: Verifichiamo che il logout sia andato a buon fine
+        $response->assertStatus(200);
+        $response->assertJson(['message' => 'Logged out successfully']);
+
+        // Verifichiamo che il token sia stato revocato
+        $this->assertDatabaseHas('oauth_access_tokens', [
+            'id' => $user->tokens->first()->id,
+            'revoked' => true,
+        ]);
+    }
 }
