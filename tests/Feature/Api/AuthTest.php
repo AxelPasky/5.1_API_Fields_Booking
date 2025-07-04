@@ -5,6 +5,7 @@ namespace Tests\Feature\Api;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use PHPUnit\Framework\Attributes\Test; // <-- Aggiungi
 use Tests\TestCase;
 
 class AuthTest extends TestCase
@@ -28,7 +29,7 @@ class AuthTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /** @test */
+    #[Test] // <-- Modifica
     public function a_user_can_login_with_correct_credentials()
     {
         // 1. Arrange: Prepariamo l'ambiente creando un utente
@@ -52,7 +53,7 @@ class AuthTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test] // <-- Modifica
     public function a_user_cannot_login_with_incorrect_credentials()
     {
         // Arrange
@@ -71,7 +72,7 @@ class AuthTest extends TestCase
         $this->assertGuest('api');
     }
 
-    /** @test */
+    #[Test] // <-- Modifica
     public function a_logged_in_user_can_logout()
     {
         // 1. Arrange: Creiamo e autentichiamo un utente
@@ -94,7 +95,7 @@ class AuthTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test] // <-- Modifica
     public function an_authenticated_user_can_fetch_their_details()
     {
         // Arrange

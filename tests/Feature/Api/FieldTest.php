@@ -5,6 +5,7 @@ namespace Tests\Feature\Api;
 use App\Models\Field;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test; // <-- Aggiungi
 use Tests\TestCase;
 
 class FieldTest extends TestCase
@@ -12,7 +13,7 @@ class FieldTest extends TestCase
     use RefreshDatabase;
     protected $seed = true;
 
-    /** @test */
+    #[Test] // <-- Modifica
     public function a_regular_user_can_only_see_available_fields()
     {
         // 1. Arrange
@@ -36,7 +37,7 @@ class FieldTest extends TestCase
         $response->assertJsonMissing(['name' => $unavailableField->name]);
     }
 
-    /** @test */
+    #[Test] // <-- Modifica
     public function an_admin_user_can_see_all_fields()
     {
         // 1. Arrange
@@ -60,7 +61,7 @@ class FieldTest extends TestCase
         $response->assertJsonCount(2, 'data');
     }
 
-    /** @test */
+    #[Test] // <-- Modifica
     public function an_authenticated_user_can_view_a_single_field()
     {
         // 1. Arrange
@@ -84,7 +85,7 @@ class FieldTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test] // <-- Modifica
     public function an_admin_can_create_a_new_field()
     {
         // 1. Arrange
@@ -109,7 +110,7 @@ class FieldTest extends TestCase
         $response->assertJsonFragment($fieldData);
     }
 
-    /** @test */
+    #[Test] // <-- Modifica
     public function a_regular_user_cannot_create_a_field()
     {
         // 1. Arrange
@@ -131,7 +132,7 @@ class FieldTest extends TestCase
         $response->assertStatus(403); // Forbidden
     }
 
-    /** @test */
+    #[Test] // <-- Modifica
     public function an_admin_can_update_a_field()
     {
         // 1. Arrange
@@ -157,7 +158,7 @@ class FieldTest extends TestCase
         $response->assertJsonFragment($updateData);
     }
 
-    /** @test */
+    #[Test] // <-- Modifica
     public function a_regular_user_cannot_update_a_field()
     {
         // 1. Arrange
@@ -175,7 +176,7 @@ class FieldTest extends TestCase
         $response->assertStatus(403); // Forbidden
     }
 
-    /** @test */
+    #[Test] // <-- Modifica
     public function an_admin_can_delete_a_field()
     {
         // 1. Arrange
@@ -193,7 +194,7 @@ class FieldTest extends TestCase
         $this->assertDatabaseMissing('fields', ['id' => $field->id]);
     }
 
-    /** @test */
+    #[Test] // <-- Modifica
     public function a_regular_user_cannot_delete_a_field()
     {
         // 1. Arrange
