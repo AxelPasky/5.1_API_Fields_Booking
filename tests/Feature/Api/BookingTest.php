@@ -193,4 +193,53 @@ class BookingTest extends TestCase
         // 3. Assert
         $response->assertStatus(403); // O 404, a seconda della policy
     }
+
+    #[Test]
+    public function an_authenticated_user_can_update_their_own_booking()
+    {
+        // 1. Arrange
+        $user = User::factory()->create();
+        $token = $user->createToken('auth-token')->accessToken;
+        $booking = Booking::factory()->create([
+            'user_id' => $user->id,
+            'start_time' => now()->addDays(2)->hour(10),
+            'end_time' => now()->addDays(2)->hour(11),
+        ]);
+
+        $updateData = [
+            'start_time' => now()->addDays(3)->hour(14)->minute(0)->second(0)->toDateTimeString(),
+            'end_time' => now()->addDays(3)->hour(15)->minute(0)->second(0)->toDateTimeString(),
+        ];
+
+        // 2. Act
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->putJson('/api/bookings/' . $booking->id, $updateData);
+
+        // 3. Assert
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('bookings', [
+            'id' => $booking->id,
+            'start_time' => $updateData['start_time'],
+        ]);
+        $response->assertJsonFragment(['start_time' => $updateData['start_time']]);
+    }
+
+    #[Test]
+    public function a_user_cannot_update_another_users_booking()
+    {
+        // 1. Arrange
+        $owner = User::factory()->create();
+        $attacker = User::factory()->create();
+        $token = $attacker->createToken('auth-token')->accessToken;
+        $booking = Booking::factory()->create(['user_id' => $owner->id]);
+
+        // 2. Act
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->putJson('/api/bookings/' . $booking->id, ['start_time' => now()->addDay()->toDateTimeString()]);
+
+        // 3. Assert
+        $response->assertStatus(403);
+    }
 }

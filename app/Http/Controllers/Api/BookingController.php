@@ -93,4 +93,44 @@ class BookingController extends Controller
 
         return response()->noContent();
     }
+
+    public function update(Request $request, Booking $booking)
+    {
+        // 1. Autorizzazione: L'utente può modificare solo le proprie prenotazioni
+        if ($request->user()->id !== $booking->user_id) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
+        // 2. Validazione
+        $validatedData = $request->validate([
+            'start_time' => 'sometimes|required|date|after:now',
+            'end_time' => 'sometimes|required|date|after:start_time',
+        ]);
+
+        $start = Carbon::parse($validatedData['start_time'] ?? $booking->start_time);
+        $end = Carbon::parse($validatedData['end_time'] ?? $booking->end_time);
+
+        // 3. Controllo sovrapposizioni (escludendo la prenotazione corrente)
+        $existingBooking = Booking::where('field_id', $booking->field_id)
+            ->where('id', '!=', $booking->id) // <-- Escludi questa prenotazione dal controllo
+            ->where(function ($query) use ($start, $end) {
+                $query->where('start_time', '<', $end)
+                      ->where('end_time', '>', $start);
+            })->exists();
+
+        if ($existingBooking) {
+            throw ValidationException::withMessages([
+                'start_time' => 'The selected time slot is no longer available.',
+            ]);
+        }
+
+        // 4. Ricalcolo del prezzo
+        $durationInHours = $start->diffInMinutes($end) / 60;
+        $validatedData['total_price'] = $durationInHours * $booking->field->price_per_hour;
+
+        // 5. Aggiornamento
+        $booking->update($validatedData);
+
+        return new BookingResource($booking);
+    }
 }
