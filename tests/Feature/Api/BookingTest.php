@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Api;
 
+use App\Models\Booking;
 use App\Models\Field;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test; // <-- Aggiungi questo
 use Tests\TestCase;
 
 class BookingTest extends TestCase
@@ -15,14 +17,15 @@ class BookingTest extends TestCase
     /**
      * A basic feature test example.
      */
-    public function test_example(): void
+    #[Test] // <-- Modifica qui
+    public function example(): void
     {
         $response = $this->get('/');
 
         $response->assertStatus(200);
     }
 
-    /** @test */
+    #[Test] // <-- Modifica qui
     public function an_authenticated_user_can_create_a_booking()
     {
         // 1. Arrange
@@ -55,7 +58,7 @@ class BookingTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test] // <-- Modifica qui
     public function a_user_cannot_book_a_field_that_is_already_booked()
     {
         // 1. Arrange

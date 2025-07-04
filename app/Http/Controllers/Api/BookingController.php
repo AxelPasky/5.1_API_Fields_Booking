@@ -21,16 +21,33 @@ class BookingController extends Controller
         ]);
 
         $field = Field::findOrFail($validatedData['field_id']);
+        $start = Carbon::parse($validatedData['start_time']);
+        $end = Carbon::parse($validatedData['end_time']);
 
-        // Semplice controllo di disponibilità per ora
+        // Controllo disponibilità del campo
         if (!$field->is_available) {
             throw ValidationException::withMessages([
                 'field_id' => 'The selected field is not available for booking.',
             ]);
         }
 
-        $start = Carbon::parse($validatedData['start_time']);
-        $end = Carbon::parse($validatedData['end_time']);
+        // NUOVO: Controllo delle sovrapposizioni di prenotazione
+        $existingBooking = Booking::where('field_id', $field->id)
+            ->where(function ($query) use ($start, $end) {
+                $query->where(function ($q) use ($start, $end) {
+                    // La nuova prenotazione inizia durante una esistente
+                    $q->where('start_time', '<', $end)
+                      ->where('end_time', '>', $start);
+                });
+            })->exists();
+
+        if ($existingBooking) {
+            throw ValidationException::withMessages([
+                'start_time' => 'The selected time slot is no longer available.',
+            ]);
+        }
+
+        // Calcolo del prezzo
         $durationInHours = $start->diffInMinutes($end) / 60;
         $totalPrice = $durationInHours * $field->price_per_hour;
 
