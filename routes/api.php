@@ -34,4 +34,5 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware(['auth:api', 'role:Admin'])->prefix('admin')->group(function () {
     Route::post('/fields', [AdminFieldController::class, 'store']);
     Route::put('/fields/{field}', [AdminFieldController::class, 'update']);
+    Route::delete('/fields/{field}', [AdminFieldController::class, 'destroy']);
 });

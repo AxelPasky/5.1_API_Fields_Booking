@@ -39,4 +39,11 @@ class AdminFieldController extends Controller
 
         return new FieldResource($field);
     }
+
+    public function destroy(Field $field)
+    {
+        $field->delete();
+
+        return response()->noContent();
+    }
 }

@@ -149,4 +149,41 @@ class FieldTest extends TestCase
         // 3. Assert
         $response->assertStatus(403); // Forbidden
     }
+
+    /** @test */
+    public function an_admin_can_delete_a_field()
+    {
+        // 1. Arrange
+        $field = Field::factory()->create();
+        $admin = User::where('email', 'admin@example.com')->first();
+        $token = $admin->createToken('auth-token')->accessToken;
+
+        // 2. Act
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->deleteJson('/api/admin/fields/' . $field->id);
+
+        // 3. Assert
+        $response->assertStatus(204); // No Content
+        $this->assertDatabaseMissing('fields', ['id' => $field->id]);
+    }
+
+    /** @test */
+    public function a_regular_user_cannot_delete_a_field()
+    {
+        // 1. Arrange
+        $field = Field::factory()->create();
+        $user = User::factory()->create();
+        $user->assignRole('User');
+        $token = $user->createToken('auth-token')->accessToken;
+
+        // 2. Act
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->deleteJson('/api/admin/fields/' . $field->id);
+
+        // 3. Assert
+        $response->assertStatus(403); // Forbidden
+        $this->assertDatabaseHas('fields', ['id' => $field->id]);
+    }
 }
