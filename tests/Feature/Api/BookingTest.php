@@ -89,4 +89,108 @@ class BookingTest extends TestCase
         $response->assertStatus(422); // Unprocessable Entity (errore di validazione)
         $response->assertJsonValidationErrors('start_time');
     }
+
+    #[Test]
+    public function an_authenticated_user_can_view_their_own_bookings()
+    {
+        // 1. Arrange
+        $user = User::factory()->create();
+        $token = $user->createToken('auth-token')->accessToken;
+
+        // Creiamo 2 prenotazioni per questo utente
+        Booking::factory()->count(2)->create(['user_id' => $user->id]);
+        // Creiamo 1 prenotazione per un altro utente, che non deve essere visibile
+        Booking::factory()->create();
+
+        // 2. Act
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->getJson('/api/bookings');
+
+        // 3. Assert
+        $response->assertStatus(200);
+        // Verifichiamo che la risposta contenga esattamente 2 prenotazioni
+        $response->assertJsonCount(2, 'data');
+        // Verifichiamo che la prima prenotazione restituita appartenga all'utente corretto
+        $response->assertJsonPath('data.0.user_id', $user->id);
+    }
+
+    #[Test]
+    public function an_authenticated_user_can_delete_their_own_booking()
+    {
+        // 1. Arrange
+        $user = User::factory()->create();
+        $token = $user->createToken('auth-token')->accessToken;
+        $booking = Booking::factory()->create(['user_id' => $user->id]);
+
+        // 2. Act
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->deleteJson('/api/bookings/' . $booking->id);
+
+        // 3. Assert
+        $response->assertStatus(204); // No Content
+        $this->assertDatabaseMissing('bookings', ['id' => $booking->id]);
+    }
+
+    #[Test]
+    public function a_user_cannot_delete_another_users_booking()
+    {
+        // 1. Arrange
+        $owner = User::factory()->create(); // Il proprietario della prenotazione
+        $attacker = User::factory()->create(); // L'utente che tenta di cancellare
+        $token = $attacker->createToken('auth-token')->accessToken;
+
+        $booking = Booking::factory()->create(['user_id' => $owner->id]);
+
+        // 2. Act
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->deleteJson('/api/bookings/' . $booking->id);
+
+        // 3. Assert
+        $response->assertStatus(403); // Forbidden
+        $this->assertDatabaseHas('bookings', ['id' => $booking->id]);
+    }
+
+    #[Test]
+    public function an_authenticated_user_can_view_a_single_booking()
+    {
+        // 1. Arrange
+        $user = User::factory()->create();
+        $token = $user->createToken('auth-token')->accessToken;
+        $booking = Booking::factory()->create(['user_id' => $user->id]);
+
+        // 2. Act
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->getJson('/api/bookings/' . $booking->id);
+
+        // 3. Assert
+        $response->assertStatus(200);
+        $response->assertJson([
+            'data' => [
+                'id' => $booking->id,
+                'user_id' => $user->id,
+            ]
+        ]);
+    }
+
+    #[Test]
+    public function a_user_cannot_view_another_users_booking()
+    {
+        // 1. Arrange
+        $owner = User::factory()->create();
+        $viewer = User::factory()->create();
+        $token = $viewer->createToken('auth-token')->accessToken;
+        $booking = Booking::factory()->create(['user_id' => $owner->id]);
+
+        // 2. Act
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->getJson('/api/bookings/' . $booking->id);
+
+        // 3. Assert
+        $response->assertStatus(403); // O 404, a seconda della policy
+    }
 }

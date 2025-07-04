@@ -41,13 +41,14 @@ class FieldTest extends TestCase
     public function an_admin_user_can_see_all_fields()
     {
         // 1. Arrange
-        // Creiamo un campo disponibile e uno non disponibile
+        $admin = User::factory()->create();
+        $admin->assignRole('Admin');
+        $token = $admin->createToken('auth-token')->accessToken;
+
         $availableField = Field::factory()->create(['is_available' => true]);
         $unavailableField = Field::factory()->create(['is_available' => false]);
-
-        // Creiamo e autentichiamo un utente admin
-        $admin = User::where('email', 'admin@example.com')->first();
-        $token = $admin->createToken('auth-token')->accessToken;
+        
+        $totalFields = Field::count(); // <-- Aggiungi questa riga per contare tutti i campi
 
         // 2. Act
         $response = $this->withHeaders([
@@ -58,7 +59,7 @@ class FieldTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonFragment(['name' => $availableField->name]);
         $response->assertJsonFragment(['name' => $unavailableField->name]);
-        $response->assertJsonCount(2, 'data');
+        $response->assertJsonCount($totalFields, 'data'); // <-- Modifica questa riga
     }
 
     #[Test] // <-- Modifica

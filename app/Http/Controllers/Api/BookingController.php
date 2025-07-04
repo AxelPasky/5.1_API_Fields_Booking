@@ -12,6 +12,13 @@ use Illuminate\Validation\ValidationException;
 
 class BookingController extends Controller
 {
+    public function index(Request $request)
+    {
+        $bookings = $request->user()->bookings()->latest()->get();
+
+        return BookingResource::collection($bookings);
+    }
+
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -63,5 +70,27 @@ class BookingController extends Controller
         return (new BookingResource($booking))
             ->response()
             ->setStatusCode(201);
+    }
+
+    public function show(Request $request, Booking $booking)
+    {
+        // Verifica che l'utente autenticato sia il proprietario della prenotazione
+        if ($request->user()->id !== $booking->user_id) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
+        return new BookingResource($booking);
+    }
+
+    public function destroy(Request $request, Booking $booking)
+    {
+        // Verifica che l'utente autenticato sia il proprietario della prenotazione
+        if ($request->user()->id !== $booking->user_id) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $booking->delete();
+
+        return response()->noContent();
     }
 }

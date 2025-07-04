@@ -33,7 +33,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/fields/{field}', [FieldController::class, 'show']);
 
     // Bookings (User)
-    Route::post('/bookings', [BookingController::class, 'store']); // <-- Spostata qui
+    Route::get('/bookings', [BookingController::class, 'index']);
+    Route::get('/bookings/{booking}', [BookingController::class, 'show']);
+    Route::post('/bookings', [BookingController::class, 'store']);
+    Route::delete('/bookings/{booking}', [BookingController::class, 'destroy']);
 });
 
 // Rotte protette solo per amministratori
