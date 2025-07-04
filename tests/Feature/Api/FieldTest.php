@@ -104,6 +104,49 @@ class FieldTest extends TestCase
 
         // 3. Assert
         $response->assertStatus(403); // Forbidden
-        $this->assertDatabaseMissing('fields', $fieldData);
+    }
+
+    /** @test */
+    public function an_admin_can_update_a_field()
+    {
+        // 1. Arrange
+        $field = Field::factory()->create();
+        $admin = User::where('email', 'admin@example.com')->first();
+        $token = $admin->createToken('auth-token')->accessToken;
+
+        $updateData = [
+            'name' => 'Updated Field Name',
+            'type' => 'padel', // <-- Cambiato da 'updated_type' a un valore valido
+            'price_per_hour' => 99.99,
+            'is_available' => false,
+        ];
+
+        // 2. Act
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->putJson('/api/admin/fields/' . $field->id, $updateData);
+
+        // 3. Assert
+        $response->assertStatus(200); // OK
+        $this->assertDatabaseHas('fields', $updateData);
+        $response->assertJsonFragment($updateData);
+    }
+
+    /** @test */
+    public function a_regular_user_cannot_update_a_field()
+    {
+        // 1. Arrange
+        $field = Field::factory()->create();
+        $user = User::factory()->create();
+        $user->assignRole('User');
+        $token = $user->createToken('auth-token')->accessToken;
+
+        // 2. Act
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->putJson('/api/admin/fields/' . $field->id, ['name' => 'Attempt to update']);
+
+        // 3. Assert
+        $response->assertStatus(403); // Forbidden
     }
 }

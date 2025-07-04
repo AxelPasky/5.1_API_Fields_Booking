@@ -33,4 +33,5 @@ Route::middleware('auth:api')->group(function () {
 // Rotte protette solo per amministratori
 Route::middleware(['auth:api', 'role:Admin'])->prefix('admin')->group(function () {
     Route::post('/fields', [AdminFieldController::class, 'store']);
+    Route::put('/fields/{field}', [AdminFieldController::class, 'update']);
 });

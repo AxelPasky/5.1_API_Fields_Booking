@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\FieldResource;
 use App\Models\Field;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class AdminFieldController extends Controller
 {
@@ -13,8 +14,8 @@ class AdminFieldController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|string|max:255',
-            'price_per_hour' => 'required|numeric|min:0', // <-- Aggiungi questa regola
+            'type' =>  ['required', Rule::in(['tennis', 'padel', 'football', 'basket'])],
+            'price_per_hour' => 'required|numeric|min:0',
             'is_available' => 'required|boolean',
         ]);
 
@@ -22,6 +23,20 @@ class AdminFieldController extends Controller
 
         return (new FieldResource($field))
                 ->response()
-                ->setStatusCode(201); // Imposta lo status code a 201 Created
+                ->setStatusCode(201);
+    }
+
+    public function update(Request $request, Field $field)
+    {
+        $validatedData = $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'type' => ['sometimes', 'required', Rule::in(['tennis', 'padel', 'football', 'basket'])],
+            'price_per_hour' => 'sometimes|required|numeric|min:0',
+            'is_available' => 'sometimes|required|boolean',
+        ]);
+
+        $field->update($validatedData);
+
+        return new FieldResource($field);
     }
 }
