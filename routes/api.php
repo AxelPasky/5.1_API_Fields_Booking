@@ -29,7 +29,6 @@ Route::middleware('auth:api')->group(function () {
     Route::put('/user', [AuthController::class, 'update']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // Fields (Public)
     Route::get('/fields', [FieldController::class, 'index']);
     Route::get('/fields/{field}', [FieldController::class, 'show']);
 
