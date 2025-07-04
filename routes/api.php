@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\AdminFieldController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\FieldController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,19 +17,23 @@ use App\Http\Controllers\Api\AuthController;
 |
 */
 
-// Rotta di login che punta al nostro controller
+// Rotte pubbliche
 Route::post('/login', [AuthController::class, 'login']);
-
-// Rotta di registrazione che punta al nostro controller
 Route::post('/register', [AuthController::class, 'register']);
 
-// Rotte protette che richiedono autenticazione
+// Rotte protette per tutti gli utenti autenticati
 Route::middleware('auth:api')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
-
-    Route::put('/user', [AuthController::class,'update']);
-
+    Route::put('/user', [AuthController::class, 'update']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    
+    Route::get('/fields', [FieldController::class, 'index']);
+    Route::get('/fields/{field}', [FieldController::class, 'show']); // <-- Aggiungi questa riga
+});
+
+// Rotte protette solo per amministratori
+Route::middleware(['auth:api', 'role:Admin'])->prefix('admin')->group(function () {
+    Route::post('/fields', [AdminFieldController::class, 'store']);
+    Route::put('/fields/{field}', [AdminFieldController::class, 'update']);
+    Route::delete('/fields/{field}', [AdminFieldController::class, 'destroy']);
 });
