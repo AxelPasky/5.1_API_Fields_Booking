@@ -28,6 +28,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/fields', [FieldController::class, 'index']);
+    Route::get('/fields/{field}', [FieldController::class, 'show']); // <-- Aggiungi questa riga
 });
 
 // Rotte protette solo per amministratori

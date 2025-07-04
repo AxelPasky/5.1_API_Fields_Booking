@@ -24,4 +24,9 @@ class FieldController extends Controller
         // Usa la risorsa per formattare la collezione di campi
         return FieldResource::collection($fields);
     }
+
+    public function show(Field $field)
+    {
+        return new FieldResource($field);
+    }
 }

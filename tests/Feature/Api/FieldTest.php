@@ -57,6 +57,31 @@ class FieldTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonFragment(['name' => $availableField->name]);
         $response->assertJsonFragment(['name' => $unavailableField->name]);
+        $response->assertJsonCount(2, 'data');
+    }
+
+    /** @test */
+    public function an_authenticated_user_can_view_a_single_field()
+    {
+        // 1. Arrange
+        $user = User::factory()->create();
+        $token = $user->createToken('auth-token')->accessToken;
+        $field = Field::factory()->create();
+
+        // 2. Act
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->getJson('/api/fields/' . $field->id);
+
+        // 3. Assert
+        $response->assertStatus(200);
+        $response->assertJson([
+            'data' => [
+                'id' => $field->id,
+                'name' => $field->name,
+                'type' => $field->type,
+            ]
+        ]);
     }
 
     /** @test */
