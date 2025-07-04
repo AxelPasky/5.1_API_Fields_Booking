@@ -108,9 +108,12 @@ class AuthTest extends TestCase
 
         // Assert
         $response->assertStatus(200);
+        // Modifica questa asserzione per cercare dentro il wrapper 'data'
         $response->assertJson([
-            'id' => $user->id,
-            'email' => $user->email,
+            'data' => [
+                'id' => $user->id,
+                'email' => $user->email,
+            ]
         ]);
     }
 }

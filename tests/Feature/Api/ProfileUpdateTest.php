@@ -41,7 +41,10 @@ class ProfileUpdateTest extends TestCase
 
         // 3. Assert: Verifichiamo che la risposta sia corretta
         $response->assertStatus(200);
-        $response->assertJsonFragment($updateData);
+        // Usa assertJson per verificare che la struttura esista nella risposta
+        $response->assertJson([
+            'data' => $updateData
+        ]);
 
         // Verifichiamo che i dati nel database siano stati aggiornati
         $this->assertDatabaseHas('users', [

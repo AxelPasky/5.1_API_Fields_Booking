@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\Rule;
+use App\Http\Resources\UserResource; // <-- 1. Aggiungi questo
 
 class AuthController extends Controller
 {
@@ -77,7 +78,8 @@ class AuthController extends Controller
 
     public function user(Request $request)
     {
-        return $request->user();
+        // 2. Usa la risorsa per formattare l'output
+        return new UserResource($request->user());
     }
 
     public function update(Request $request)
@@ -98,6 +100,7 @@ class AuthController extends Controller
 
         $user->update($validatedData);
 
-        return response()->json($user);
+        // 3. Usa la risorsa anche qui per una risposta consistente
+        return new UserResource($user);
     }
 }
