@@ -17,6 +17,8 @@ class FieldResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'type' => $this->type,
+            'price_per_hour' => $this->price_per_hour, // <-- Aggiungi questa riga
             'is_available' => $this->is_available,
             'created_at' => $this->created_at->toDateTimeString(),
         ];
