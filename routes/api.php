@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\Api\Admin\AdminFieldController;
 use App\Http\Controllers\Api\Admin\StatisticsController;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\BookingController;
-use App\Http\Controllers\Api\FieldController;
+use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\User\BookingController;
+use App\Http\Controllers\Api\Public\FieldController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
