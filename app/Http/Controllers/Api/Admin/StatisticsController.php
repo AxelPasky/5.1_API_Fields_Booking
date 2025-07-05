@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Field; // <-- Aggiungi questo
 use Illuminate\Http\Request;
 
 class StatisticsController extends Controller
@@ -18,5 +19,14 @@ class StatisticsController extends Controller
                 'total_revenue' => round($totalRevenue, 2)
             ]
         ]);
+    }
+
+    public function fieldPerformance()
+    {
+        $fields = Field::withCount('bookings')
+            ->orderBy('bookings_count', 'desc')
+            ->get();
+
+        return response()->json(['data' => $fields]);
     }
 }

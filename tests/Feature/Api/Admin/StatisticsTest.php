@@ -4,6 +4,7 @@ namespace Tests\Feature\Api\Admin;
 
 use App\Models\Booking;
 use App\Models\User;
+use App\Models\Field;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -54,5 +55,34 @@ class StatisticsTest extends TestCase
                 'total_revenue' => 325.00 // 100 + 150 + 75
             ]
         ]);
+    }
+
+    #[Test]
+    public function an_admin_can_view_field_performance_statistics()
+    {
+        // Arrange
+        $admin = User::factory()->create();
+        $admin->assignRole('Admin');
+        $token = $admin->createToken('auth-token')->accessToken;
+
+        // Creiamo due campi
+        $popularField = Field::factory()->create(['name' => 'Campo Popolare']);
+        $unpopularField = Field::factory()->create(['name' => 'Campo Meno Popolare']);
+
+        // Creiamo 3 prenotazioni per il campo popolare e 1 per l'altro
+        Booking::factory()->count(3)->create(['field_id' => $popularField->id]);
+        Booking::factory()->create(['field_id' => $unpopularField->id]);
+
+        // Act
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->getJson('/api/admin/statistics/field-performance');
+
+        // Assert
+        $response->assertStatus(200);
+        $response->assertJsonPath('data.0.name', $popularField->name);
+        $response->assertJsonPath('data.0.bookings_count', 3);
+        $response->assertJsonPath('data.1.name', $unpopularField->name);
+        $response->assertJsonPath('data.1.bookings_count', 1);
     }
 }

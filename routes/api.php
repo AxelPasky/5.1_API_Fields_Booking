@@ -47,6 +47,7 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware(['auth:api', 'role:Admin'])->prefix('admin')->group(function () {
     // Statistics (Admin)
     Route::get('/statistics/revenue', [StatisticsController::class, 'revenue']);
+    Route::get('/statistics/field-performance', [StatisticsController::class, 'fieldPerformance']); // <-- Aggiungi questa riga
 
     // Fields (Admin)
     Route::post('/fields', [AdminFieldController::class, 'store']);
