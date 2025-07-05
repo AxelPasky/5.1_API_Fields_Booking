@@ -1,6 +1,5 @@
 <?php
-
-namespace Tests\Feature\Api;
+namespace Tests\Feature\Api\Public; // <-- Aggiorna a questo
 
 use App\Models\Field;
 use App\Models\User;

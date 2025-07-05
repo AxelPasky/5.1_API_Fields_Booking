@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
-use Carbon\Carbon; // Import Carbon
 
 class BookingPolicy
 {
@@ -59,20 +58,15 @@ class BookingPolicy
 
     public function update(User $user, Booking $booking): bool
     {
-        $isPastBooking = Carbon::parse($booking->start_time)->isPast();
-
-        return $user->id === $booking->user_id && !$isPastBooking;
+        return $user->id === $booking->user_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
 
-    public function delete(User $user, Booking $booking): bool
+    public function destroy(User $user, Booking $booking): bool
     {
-        $isPastBooking = Carbon::parse($booking->start_time)->isPast();
-        
-        return $user->id === $booking->user_id && !$isPastBooking;
+        return $user->id === $booking->user_id;
     }
-
 }

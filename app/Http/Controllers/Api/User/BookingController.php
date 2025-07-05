@@ -9,18 +9,20 @@ use App\Models\Field;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response; // <-- Aggiungi questo
 use Illuminate\Validation\ValidationException;
 
 class BookingController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): AnonymousResourceCollection
     {
-        $bookings = $request->user()->bookings()->latest()->get();
+        $bookings = $request->user()->bookings()->with('field')->latest()->paginate(10);
 
         return BookingResource::collection($bookings);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): BookingResource
     {
         $validatedData = $request->validate([
             'field_id' => 'required|exists:fields,id',
@@ -68,14 +70,11 @@ class BookingController extends Controller
             'status' => 'confirmed', // Per ora confermiamo direttamente
         ]);
 
-        return (new BookingResource($booking))
-            ->response()
-            ->setStatusCode(201);
+        return new BookingResource($booking);
     }
 
-    public function show(Request $request, Booking $booking)
+    public function show(Request $request, Booking $booking): BookingResource|JsonResponse
     {
-        // Verifica che l'utente autenticato sia il proprietario della prenotazione
         if ($request->user()->id !== $booking->user_id) {
             return response()->json(['error' => 'Forbidden'], 403);
         }
@@ -83,11 +82,10 @@ class BookingController extends Controller
         return new BookingResource($booking);
     }
 
-    public function destroy(Request $request, Booking $booking)
+    public function destroy(Request $request, Booking $booking): Response|JsonResponse // <-- Modifica qui
     {
-        // Verifica che l'utente autenticato sia il proprietario della prenotazione
         if ($request->user()->id !== $booking->user_id) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+            return response()->json(['error' => 'Forbidden'], 403);
         }
 
         $booking->delete();
@@ -95,9 +93,8 @@ class BookingController extends Controller
         return response()->noContent();
     }
 
-    public function update(Request $request, Booking $booking)
+    public function update(Request $request, Booking $booking): BookingResource|JsonResponse
     {
-        // 1. Autorizzazione: L'utente può modificare solo le proprie prenotazioni
         if ($request->user()->id !== $booking->user_id) {
             return response()->json(['error' => 'Forbidden'], 403);
         }

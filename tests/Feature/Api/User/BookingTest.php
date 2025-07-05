@@ -1,6 +1,5 @@
 <?php
-
-namespace Tests\Feature\Api;
+namespace Tests\Feature\Api\User; // <-- Aggiorna a questo
 
 use App\Models\Booking;
 use App\Models\Field;
