@@ -31,6 +31,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/fields', [FieldController::class, 'index']);
     Route::get('/fields/{field}', [FieldController::class, 'show']);
+    Route::get('/fields/{field}/availability' , [FieldController::class, 'getAvailability']);
 
     // Bookings (User)
     Route::post('/bookings/calculate-price', [BookingController::class, 'calculatePrice']); // <-- Aggiungi questa riga

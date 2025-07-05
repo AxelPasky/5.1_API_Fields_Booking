@@ -21,7 +21,7 @@ class RegistrationTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /** @test */
+     #[Test]
     public function a_user_can_register_with_valid_data()
     {
         // 1. Arrange: Prepariamo i dati per il nuovo utente
@@ -46,7 +46,7 @@ class RegistrationTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function registration_requires_password_confirmation()
     {
         // Arrange
