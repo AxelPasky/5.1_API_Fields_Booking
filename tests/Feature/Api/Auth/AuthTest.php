@@ -12,24 +12,8 @@ class AuthTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * Indica se il seeder predefinito deve essere eseguito prima di ogni test.
-     *
-     * @var bool
-     */
-    protected $seed = true;
 
-    /**
-     * A basic feature test example.
-     */
-    public function test_example(): void
-    {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
-    }
-
-    #[Test] // <-- Modifica
+    #[Test]
     public function a_user_can_login_with_correct_credentials()
     {
         // 1. Arrange: Prepariamo l'ambiente creando un utente

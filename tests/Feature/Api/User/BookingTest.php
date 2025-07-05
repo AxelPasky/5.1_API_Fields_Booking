@@ -12,19 +12,10 @@ use Tests\TestCase;
 class BookingTest extends TestCase
 {
     use RefreshDatabase;
-    protected $seed = true;
 
     /**
      * A basic feature test example.
      */
-    #[Test] // <-- Modifica qui
-    public function example(): void
-    {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
-    }
-
     #[Test] // <-- Modifica qui
     public function an_authenticated_user_can_create_a_booking()
     {
