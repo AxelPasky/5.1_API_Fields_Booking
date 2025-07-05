@@ -242,4 +242,33 @@ class BookingTest extends TestCase
         // 3. Assert
         $response->assertStatus(403);
     }
+
+    #[Test]
+    public function it_can_calculate_the_price_for_a_booking_slot()
+    {
+        // 1. Arrange
+        $user = User::factory()->create();
+        $token = $user->createToken('auth-token')->accessToken;
+        $field = Field::factory()->create(['price_per_hour' => 50.00]);
+
+        $bookingData = [
+            'field_id' => $field->id,
+            // Prenotazione di 2 ore
+            'start_time' => now()->addDay()->hour(10)->minute(0)->second(0)->toDateTimeString(),
+            'end_time' => now()->addDay()->hour(12)->minute(0)->second(0)->toDateTimeString(),
+        ];
+
+        // 2. Act
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->postJson('/api/bookings/calculate-price', $bookingData);
+
+        // 3. Assert
+        $response->assertStatus(200);
+        $response->assertJson([
+            'data' => [
+                'total_price' => 100.00 // 2 ore * 50 €/ora
+            ]
+        ]);
+    }
 }

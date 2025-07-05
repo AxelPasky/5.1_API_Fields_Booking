@@ -4,6 +4,8 @@ namespace Tests\Feature\Api;
 
 use App\Models\Field;
 use App\Models\User;
+use App\Models\Booking; // <-- Aggiungi questo
+use Carbon\Carbon; // <-- Aggiungi questo
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test; // <-- Aggiungi
 use Tests\TestCase;
@@ -212,5 +214,38 @@ class FieldTest extends TestCase
         // 3. Assert
         $response->assertStatus(403); // Forbidden
         $this->assertDatabaseHas('fields', ['id' => $field->id]);
+    }
+
+    #[Test]
+    public function it_returns_available_time_slots_for_a_given_date()
+    {
+        // 1. Arrange
+        $user = User::factory()->create();
+        $token = $user->createToken('auth-token')->accessToken;
+        $field = Field::factory()->create();
+        $date = Carbon::tomorrow();
+
+        // Prenotazione esistente dalle 14:00 alle 16:00
+        Booking::factory()->create([
+            'field_id' => $field->id,
+            'start_time' => $date->copy()->hour(14),
+            'end_time' => $date->copy()->hour(16),
+        ]);
+
+        // 2. Act
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->getJson("/api/fields/{$field->id}/availability?date=" . $date->toDateString());
+
+        // 3. Assert
+        $response->assertStatus(200);
+        // Lo slot delle 10:00 dovrebbe essere disponibile
+        $response->assertJsonFragment(['time' => '10:00', 'available' => true]);
+        // Lo slot delle 14:00 dovrebbe essere occupato
+        $response->assertJsonFragment(['time' => '14:00', 'available' => false]);
+        // Lo slot delle 15:00 dovrebbe essere occupato
+        $response->assertJsonFragment(['time' => '15:00', 'available' => false]);
+        // Lo slot delle 16:00 dovrebbe essere di nuovo disponibile
+        $response->assertJsonFragment(['time' => '16:00', 'available' => true]);
     }
 }

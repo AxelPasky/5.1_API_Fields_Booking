@@ -22,7 +22,7 @@ class ProfileUpdateTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /** @test */
+     #[Test]
     public function an_authenticated_user_can_update_their_profile()
     {
         // 1. Arrange: Creiamo e autentichiamo un utente
@@ -54,7 +54,7 @@ class ProfileUpdateTest extends TestCase
         ]);
     }
 
-    /** @test */
+     #[Test]
     public function updating_profile_with_an_existing_email_fails()
     {
         // Arrange: Creiamo due utenti

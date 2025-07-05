@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\AdminFieldController;
+use App\Http\Controllers\Api\Admin\StatisticsController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\FieldController;
@@ -31,8 +32,10 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/fields', [FieldController::class, 'index']);
     Route::get('/fields/{field}', [FieldController::class, 'show']);
+    Route::get('/fields/{field}/availability' , [FieldController::class, 'getAvailability']);
 
     // Bookings (User)
+    Route::post('/bookings/calculate-price', [BookingController::class, 'calculatePrice']); // <-- Aggiungi questa riga
     Route::get('/bookings', [BookingController::class, 'index']);
     Route::get('/bookings/{booking}', [BookingController::class, 'show']);
     Route::post('/bookings', [BookingController::class, 'store']);
@@ -42,6 +45,10 @@ Route::middleware('auth:api')->group(function () {
 
 // Rotte protette solo per amministratori
 Route::middleware(['auth:api', 'role:Admin'])->prefix('admin')->group(function () {
+    // Statistics (Admin)
+    Route::get('/statistics/revenue', [StatisticsController::class, 'revenue']);
+    Route::get('/statistics/field-performance', [StatisticsController::class, 'fieldPerformance']); // <-- Aggiungi questa riga
+
     // Fields (Admin)
     Route::post('/fields', [AdminFieldController::class, 'store']);
     Route::put('/fields/{field}', [AdminFieldController::class, 'update']);

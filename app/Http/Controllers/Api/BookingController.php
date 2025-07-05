@@ -7,6 +7,7 @@ use App\Http\Resources\BookingResource;
 use App\Models\Booking;
 use App\Models\Field;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -132,5 +133,27 @@ class BookingController extends Controller
         $booking->update($validatedData);
 
         return new BookingResource($booking);
+    }
+
+    public function calculatePrice(Request $request): JsonResponse
+    {
+        $validatedData = $request->validate([
+            'field_id' => 'required|exists:fields,id',
+            'start_time' => 'required|date|after:now',
+            'end_time' => 'required|date|after:start_time',
+        ]);
+
+        $field = Field::findOrFail($validatedData['field_id']);
+        $start = Carbon::parse($validatedData['start_time']);
+        $end = Carbon::parse($validatedData['end_time']);
+
+        $durationInHours = $start->diffInMinutes($end) / 60;
+        $totalPrice = $durationInHours * $field->price_per_hour;
+
+        return response()->json([
+            'data' => [
+                'total_price' => round($totalPrice, 2)
+            ]
+        ]);
     }
 }

@@ -6,7 +6,7 @@ use Tests\TestCase;
 
 class SimpleRouteTest extends TestCase
 {
-    /** @test */
+     #[Test]
     public function the_application_returns_a_successful_response()
     {
         // Questo test non usa il database.
