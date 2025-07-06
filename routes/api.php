@@ -19,11 +19,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Rotte pubbliche
+// PUBLIC
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
-// Rotte protette per tutti gli utenti autenticati
+// AUTH USER
 Route::middleware('auth:api')->group(function () {
     // User
     Route::get('/user', [AuthController::class, 'user']);
@@ -43,7 +43,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/bookings/{booking}', [BookingController::class, 'destroy']);
 });
 
-// Rotte protette solo per amministratori
+// AUTH ADMIN
 Route::middleware(['auth:api', 'role:Admin'])->prefix('admin')->group(function () {
     // Statistics (Admin)
     Route::get('/statistics/revenue', [StatisticsController::class, 'revenue']);

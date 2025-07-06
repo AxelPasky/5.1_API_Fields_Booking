@@ -38,7 +38,7 @@ class StatisticsTest extends TestCase
         $admin->assignRole('Admin');
         $token = $admin->createToken('auth-token')->accessToken;
 
-        // Creiamo alcune prenotazioni con prezzi diversi
+       
         Booking::factory()->create(['total_price' => 100]);
         Booking::factory()->create(['total_price' => 150]);
         Booking::factory()->create(['total_price' => 75]);
@@ -52,7 +52,7 @@ class StatisticsTest extends TestCase
         $response->assertStatus(200);
         $response->assertJson([
             'data' => [
-                'total_revenue' => 325.00 // 100 + 150 + 75
+                'total_revenue' => 325.00 
             ]
         ]);
     }
@@ -65,11 +65,9 @@ class StatisticsTest extends TestCase
         $admin->assignRole('Admin');
         $token = $admin->createToken('auth-token')->accessToken;
 
-        // Creiamo due campi
         $popularField = Field::factory()->create(['name' => 'Campo Popolare']);
         $unpopularField = Field::factory()->create(['name' => 'Campo Meno Popolare']);
 
-        // Creiamo 3 prenotazioni per il campo popolare e 1 per l'altro
         Booking::factory()->count(3)->create(['field_id' => $popularField->id]);
         Booking::factory()->create(['field_id' => $unpopularField->id]);
 
