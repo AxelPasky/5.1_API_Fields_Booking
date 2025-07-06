@@ -139,7 +139,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: July 5, 2025</li>
+        <li>Last updated: July 6, 2025</li>
     </ul>
 </div>
 
@@ -1213,7 +1213,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"date\": \"2025-07-05\"
+    \"date\": \"2025-07-06\"
 }"
 </code></pre></div>
 
@@ -1230,7 +1230,7 @@ const headers = {
 };
 
 let body = {
-    "date": "2025-07-05"
+    "date": "2025-07-06"
 };
 
 fetch(url, {
@@ -1358,10 +1358,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="date"                data-endpoint="GETapi-fields--field_id--availability"
-               value="2025-07-05"
+               value="2025-07-06"
                data-component="body">
     <br>
-<p>Must be a valid date in the format <code>Y-m-d</code>. Example: <code>2025-07-05</code></p>
+<p>Must be a valid date in the format <code>Y-m-d</code>. Example: <code>2025-07-06</code></p>
         </div>
         </form>
 
@@ -1385,8 +1385,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"field_id\": \"consequatur\",
-    \"start_time\": \"2106-08-04\",
-    \"end_time\": \"2106-08-04\"
+    \"start_time\": \"2106-08-05\",
+    \"end_time\": \"2106-08-05\"
 }"
 </code></pre></div>
 
@@ -1404,8 +1404,8 @@ const headers = {
 
 let body = {
     "field_id": "consequatur",
-    "start_time": "2106-08-04",
-    "end_time": "2106-08-04"
+    "start_time": "2106-08-05",
+    "end_time": "2106-08-05"
 };
 
 fetch(url, {
@@ -1516,10 +1516,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="start_time"                data-endpoint="POSTapi-bookings-calculate-price"
-               value="2106-08-04"
+               value="2106-08-05"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2106-08-04</code></p>
+<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2106-08-05</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>end_time</code></b>&nbsp;&nbsp;
@@ -1527,10 +1527,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="end_time"                data-endpoint="POSTapi-bookings-calculate-price"
-               value="2106-08-04"
+               value="2106-08-05"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after <code>start_time</code>. Example: <code>2106-08-04</code></p>
+<p>Must be a valid date. Must be a date after <code>start_time</code>. Example: <code>2106-08-05</code></p>
         </div>
         </form>
 
@@ -1842,8 +1842,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"field_id\": \"consequatur\",
-    \"start_time\": \"2106-08-04\",
-    \"end_time\": \"2106-08-04\"
+    \"start_time\": \"2106-08-05\",
+    \"end_time\": \"2106-08-05\"
 }"
 </code></pre></div>
 
@@ -1861,8 +1861,8 @@ const headers = {
 
 let body = {
     "field_id": "consequatur",
-    "start_time": "2106-08-04",
-    "end_time": "2106-08-04"
+    "start_time": "2106-08-05",
+    "end_time": "2106-08-05"
 };
 
 fetch(url, {
@@ -1973,10 +1973,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="start_time"                data-endpoint="POSTapi-bookings"
-               value="2106-08-04"
+               value="2106-08-05"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2106-08-04</code></p>
+<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2106-08-05</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>end_time</code></b>&nbsp;&nbsp;
@@ -1984,10 +1984,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="end_time"                data-endpoint="POSTapi-bookings"
-               value="2106-08-04"
+               value="2106-08-05"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after <code>start_time</code>. Example: <code>2106-08-04</code></p>
+<p>Must be a valid date. Must be a date after <code>start_time</code>. Example: <code>2106-08-05</code></p>
         </div>
         </form>
 
@@ -2010,8 +2010,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"start_time\": \"2106-08-04\",
-    \"end_time\": \"2106-08-04\"
+    \"start_time\": \"2106-08-05\",
+    \"end_time\": \"2106-08-05\"
 }"
 </code></pre></div>
 
@@ -2028,8 +2028,8 @@ const headers = {
 };
 
 let body = {
-    "start_time": "2106-08-04",
-    "end_time": "2106-08-04"
+    "start_time": "2106-08-05",
+    "end_time": "2106-08-05"
 };
 
 fetch(url, {
@@ -2141,10 +2141,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="start_time"                data-endpoint="PUTapi-bookings--booking_id-"
-               value="2106-08-04"
+               value="2106-08-05"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2106-08-04</code></p>
+<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2106-08-05</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>end_time</code></b>&nbsp;&nbsp;
@@ -2152,10 +2152,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="end_time"                data-endpoint="PUTapi-bookings--booking_id-"
-               value="2106-08-04"
+               value="2106-08-05"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after <code>start_time</code>. Example: <code>2106-08-04</code></p>
+<p>Must be a valid date. Must be a date after <code>start_time</code>. Example: <code>2106-08-05</code></p>
         </div>
         </form>
 
