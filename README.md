@@ -1,7 +1,7 @@
 # Field Booking System API
 
 A modern RESTful API built with Laravel for managing and booking sports fields.  
-This project is a refactored, secure, and fully tested API with role-based access, advanced business logic, and comprehensive documentation.
+This project is a secure, fully tested API with role-based access, advanced business logic, and comprehensive documentation.
 
 ---
 
@@ -41,7 +41,6 @@ This project is a refactored, secure, and fully tested API with role-based acces
 
 - PHP >= 8.2
 - Composer
-- Node.js & NPM (for asset build, required for Scribe and docs)
 - MySQL or compatible database
 
 ### 1. Clone the Repository
@@ -55,7 +54,6 @@ cd 5.1_API_Fields_Booking
 
 ```bash
 composer install
-npm install
 ```
 
 ### 3. Environment Configuration
@@ -79,10 +77,9 @@ This creates demo users and fields.
 php artisan storage:link
 ```
 
-### 6. Build Assets and Run the Server
+### 6. Run the Server
 
 ```bash
-npm run build
 php artisan serve
 ```
 The API will be available at `http://127.0.0.1:8000`.
@@ -171,4 +168,6 @@ This project is open-sourced software licensed under the [MIT license](https://o
 ---
 
 **Note:**  
-- Running `npm install` and `npm run build` is required for the documentation and any frontend assets to work correctly, even if the API is your main focus.
+This project is a pure API and does **not** require Node.js, NPM, or any frontend asset build steps.  
+You can safely ignore or delete any Node.js-related files.
+
