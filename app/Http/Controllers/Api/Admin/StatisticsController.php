@@ -7,11 +7,20 @@ use App\Models\Booking;
 use App\Models\Field; // <-- Aggiungi questo
 use Illuminate\Http\Request;
 
+/**
+ * @group Admin
+ * Endpoints for retrieving statistics and performance data for admins.
+ */
 class StatisticsController extends Controller
 {
+    /**
+     * Get total revenue
+     *
+     * Returns the sum of all booking prices.
+     */
     public function revenue()
     {
-        // Calcola la somma di tutti i total_price nella tabella bookings
+      
         $totalRevenue = Booking::sum('total_price');
 
         return response()->json([
@@ -21,6 +30,11 @@ class StatisticsController extends Controller
         ]);
     }
 
+    /**
+     * Get field performance
+     *
+     * Returns a list of fields with their booking counts.
+     */
     public function fieldPerformance()
     {
         $fields = Field::withCount('bookings')

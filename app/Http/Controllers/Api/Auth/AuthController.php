@@ -10,10 +10,21 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\Rule;
-use App\Http\Resources\UserResource; // <-- 1. Aggiungi questo
+use App\Http\Resources\UserResource;
 
+/**
+ * @group User
+ * Endpoints for user authentication and profile management.
+ */
 class AuthController extends Controller
 {
+    /**
+     * @group Auth
+     * Log in a user.
+     *
+     * @bodyParam email string required The user's email address. Example: john.doe@example.com
+     * @bodyParam password string required The user's password. Example: password123
+     */
     public function login(Request $request)
     {
         $request->validate([
@@ -21,16 +32,15 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        // Cerca l'utente tramite email
+      
         $user = User::where('email', $request->email)->first();
 
-        // Verifica che l'utente esista e che la password sia corretta
+      
         if (! $user || ! Hash::check($request->password, $user->password)) {
-            // Invece di lanciare un'eccezione, restituisci una risposta 401
-            return response()->json(['message' => 'Le credenziali fornite non sono corrette.'], 401);
+            return response()->json(['message' => 'The provided credentials are incorrect.'], 401);
         }
 
-        // Se le credenziali sono corrette, crea e restituisce il token
+        
         $token = $user->createToken('auth-token')->accessToken;
 
         return response()->json([
@@ -39,35 +49,44 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * @group Auth
+     * Register a new user.
+     *
+     * @bodyParam name string required The user's name. Example: John Doe
+     * @bodyParam email string required The user's email address. Example: john.doe@example.com
+     * @bodyParam password string required The user's password. Must be confirmed. Example: password123
+     * @bodyParam password_confirmation string required Password confirmation. Must match the password. Example: password123
+     */
     public function register(Request $request)
     {
-        // 1. Valida i dati in ingresso
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // 2. Crea il nuovo utente
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        // Assegna il ruolo di default 'User'
         $user->assignRole('User');
 
-        // 3. Crea un token di accesso per il nuovo utente
         $token = $user->createToken('auth-token')->accessToken;
 
-        // 4. Restituisci la risposta con il token e lo stato 201
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
         ], 201);
     }
 
+    /**
+     * Log out
+     *
+     * Revokes the current access token and logs out the user.
+     */
     public function logout(Request $request)
     {
         // Revoca il token di accesso corrente
@@ -76,12 +95,22 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out successfully']);
     }
 
+    /**
+     * Get user profile
+     *
+     * Returns the details of the currently authenticated user.
+     */
     public function user(Request $request)
     {
         // 2. Usa la risorsa per formattare l'output
         return new UserResource($request->user());
     }
 
+    /**
+     * Update user profile
+     *
+     * Allows the user to update their name and email address.
+     */
     public function update(Request $request)
     {
         $user = $request->user();
@@ -100,7 +129,7 @@ class AuthController extends Controller
 
         $user->update($validatedData);
 
-        // 3. Usa la risorsa anche qui per una risposta consistente
+    
         return new UserResource($user);
     }
 }

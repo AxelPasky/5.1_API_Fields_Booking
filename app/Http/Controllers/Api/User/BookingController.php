@@ -13,8 +13,17 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response; // <-- Aggiungi questo
 use Illuminate\Validation\ValidationException;
 
+/**
+ * @group User
+ * Endpoints for managing user bookings (create, view, update, delete).
+ */
 class BookingController extends Controller
 {
+    /**
+     * List bookings
+     *
+     * Returns a paginated list of the user's bookings.
+     */
     public function index(Request $request): AnonymousResourceCollection
     {
         $bookings = $request->user()->bookings()->with('field')->latest()->paginate(10);
@@ -22,6 +31,11 @@ class BookingController extends Controller
         return BookingResource::collection($bookings);
     }
 
+    /**
+     * Create booking
+     *
+     * Allows users to book a field for a specific time slot.
+     */
     public function store(Request $request): BookingResource
     {
         $validatedData = $request->validate([
@@ -41,11 +55,10 @@ class BookingController extends Controller
             ]);
         }
 
-        // NUOVO: Controllo delle sovrapposizioni di prenotazione
+     
         $existingBooking = Booking::where('field_id', $field->id)
             ->where(function ($query) use ($start, $end) {
                 $query->where(function ($q) use ($start, $end) {
-                    // La nuova prenotazione inizia durante una esistente
                     $q->where('start_time', '<', $end)
                       ->where('end_time', '>', $start);
                 });
@@ -57,7 +70,7 @@ class BookingController extends Controller
             ]);
         }
 
-        // Calcolo del prezzo
+      
         $durationInHours = $start->diffInMinutes($end) / 60;
         $totalPrice = $durationInHours * $field->price_per_hour;
 
@@ -67,12 +80,17 @@ class BookingController extends Controller
             'start_time' => $start,
             'end_time' => $end,
             'total_price' => $totalPrice,
-            'status' => 'confirmed', // Per ora confermiamo direttamente
+            'status' => 'confirmed', 
         ]);
 
         return new BookingResource($booking);
     }
 
+    /**
+     * Show booking
+     *
+     * Returns details of a single booking if it belongs to the user.
+     */
     public function show(Request $request, Booking $booking): BookingResource|JsonResponse
     {
         if ($request->user()->id !== $booking->user_id) {
@@ -82,6 +100,11 @@ class BookingController extends Controller
         return new BookingResource($booking);
     }
 
+    /**
+     * Delete booking
+     *
+     * Allows users to cancel their booking.
+     */
     public function destroy(Request $request, Booking $booking): Response|JsonResponse // <-- Modifica qui
     {
         if ($request->user()->id !== $booking->user_id) {
@@ -93,13 +116,17 @@ class BookingController extends Controller
         return response()->noContent();
     }
 
+    /**
+     * Update booking
+     *
+     * Allows users to modify their booking details.
+     */
     public function update(Request $request, Booking $booking): BookingResource|JsonResponse
     {
         if ($request->user()->id !== $booking->user_id) {
             return response()->json(['error' => 'Forbidden'], 403);
         }
 
-        // 2. Validazione
         $validatedData = $request->validate([
             'start_time' => 'sometimes|required|date|after:now',
             'end_time' => 'sometimes|required|date|after:start_time',
@@ -108,9 +135,9 @@ class BookingController extends Controller
         $start = Carbon::parse($validatedData['start_time'] ?? $booking->start_time);
         $end = Carbon::parse($validatedData['end_time'] ?? $booking->end_time);
 
-        // 3. Controllo sovrapposizioni (escludendo la prenotazione corrente)
+       
         $existingBooking = Booking::where('field_id', $booking->field_id)
-            ->where('id', '!=', $booking->id) // <-- Escludi questa prenotazione dal controllo
+            ->where('id', '!=', $booking->id) 
             ->where(function ($query) use ($start, $end) {
                 $query->where('start_time', '<', $end)
                       ->where('end_time', '>', $start);
@@ -122,16 +149,21 @@ class BookingController extends Controller
             ]);
         }
 
-        // 4. Ricalcolo del prezzo
+        
         $durationInHours = $start->diffInMinutes($end) / 60;
         $validatedData['total_price'] = $durationInHours * $booking->field->price_per_hour;
 
-        // 5. Aggiornamento
+      
         $booking->update($validatedData);
 
         return new BookingResource($booking);
     }
 
+    /**
+     * Calculate price
+     *
+     * Returns the total price for a booking based on field and time slot.
+     */
     public function calculatePrice(Request $request): JsonResponse
     {
         $validatedData = $request->validate([

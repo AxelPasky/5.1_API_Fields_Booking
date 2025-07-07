@@ -9,29 +9,48 @@ use App\Models\Booking;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
+/**
+ * @group Public
+ * Endpoints for viewing and retrieving information about fields.
+ * These endpoints are accessible to all users.
+ */
 class FieldController extends Controller
 {
+    /**
+     * List fields
+     *
+     * Returns a list of all fields. Admins see all fields, others only available ones.
+     */
     public function index(Request $request)
     {
         $user = $request->user();
 
-        // Se l'utente è un admin, mostra tutti i campi.
-        // Altrimenti, mostra solo quelli disponibili.
+        
         if ($user->hasRole('Admin')) {
             $fields = Field::all();
         } else {
             $fields = Field::where('is_available', true)->get();
         }
 
-        // Usa la risorsa per formattare la collezione di campi
+       
         return FieldResource::collection($fields);
     }
 
+    /**
+     * Show field
+     *
+     * Returns detailed information about a single field.
+     */
     public function show(Field $field)
     {
         return new FieldResource($field);
     }
 
+    /**
+     * Get field availability
+     *
+     * Returns available time slots for the field on the specified date.
+     */
     public function getAvailability(Request $request, Field $field)
     {
         $validated = $request->validate([
@@ -40,12 +59,12 @@ class FieldController extends Controller
 
         $date = Carbon::parse($validated['date'])->startOfDay();
 
-        // Recupera tutte le prenotazioni per questo campo in questa data
+       
         $bookingsOnDate = Booking::where('field_id', $field->id)
             ->whereDate('start_time', $date)
             ->get();
 
-        // Definisci gli orari di apertura (es. 8:00 - 22:00) e la durata degli slot (es. 1 ora)
+
         $openingTime = $date->copy()->hour(8);
         $closingTime = $date->copy()->hour(22);
         $slotDurationMinutes = 60;
@@ -53,7 +72,6 @@ class FieldController extends Controller
         $timeSlots = [];
         $currentTime = $openingTime->copy();
 
-        // Genera tutti gli slot possibili e controlla la disponibilità
         while ($currentTime < $closingTime) {
             $slotEnd = $currentTime->copy()->addMinutes($slotDurationMinutes);
             $isAvailable = true;
@@ -62,7 +80,7 @@ class FieldController extends Controller
                 $bookingStart = Carbon::parse($booking->start_time);
                 $bookingEnd = Carbon::parse($booking->end_time);
 
-                // Controlla se lo slot corrente si sovrappone con una prenotazione esistente
+                
                 if ($currentTime < $bookingEnd && $slotEnd > $bookingStart) {
                     $isAvailable = false;
                     break;

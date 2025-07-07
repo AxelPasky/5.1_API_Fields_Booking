@@ -8,8 +8,17 @@ use App\Models\Field;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
+/**
+ * @group Admin
+ * Endpoints for managing fields (create, update, delete) as an admin.
+ */
 class AdminFieldController extends Controller
 {
+    /**
+     * Create field
+     *
+     * Allows admins to add a new field.
+     */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -26,6 +35,11 @@ class AdminFieldController extends Controller
                 ->setStatusCode(201);
     }
 
+    /**
+     * Update field
+     *
+     * Allows admins to update field details.
+     */
     public function update(Request $request, Field $field)
     {
         $validatedData = $request->validate([
@@ -40,6 +54,11 @@ class AdminFieldController extends Controller
         return new FieldResource($field);
     }
 
+    /**
+     * Delete field
+     *
+     * Allows admins to remove a field from the system.
+     */
     public function destroy(Field $field)
     {
         $field->delete();
