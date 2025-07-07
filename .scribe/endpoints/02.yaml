@@ -1,0 +1,173 @@
+name: Public
+description: |-
+  Endpoints for viewing and retrieving information about fields.
+  These endpoints are accessible to all users.
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/fields
+    metadata:
+      groupName: Public
+      groupDescription: |-
+        Endpoints for viewing and retrieving information about fields.
+        These endpoints are accessible to all users.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List fields'
+      description: 'Returns a list of all fields. Admins see all fields, others only available ones.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer Bearer {TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/fields/{field_id}'
+    metadata:
+      groupName: Public
+      groupDescription: |-
+        Endpoints for viewing and retrieving information about fields.
+        These endpoints are accessible to all users.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Show field'
+      description: 'Returns detailed information about a single field.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer Bearer {TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      field_id:
+        name: field_id
+        description: 'The ID of the field.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      field_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/fields/{field_id}/availability'
+    metadata:
+      groupName: Public
+      groupDescription: |-
+        Endpoints for viewing and retrieving information about fields.
+        These endpoints are accessible to all users.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get field availability'
+      description: 'Returns available time slots for the field on the specified date.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer Bearer {TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      field_id:
+        name: field_id
+        description: 'The ID of the field.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      field_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      date:
+        name: date
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: true
+        example: '2025-07-07'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      date: '2025-07-07'
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
