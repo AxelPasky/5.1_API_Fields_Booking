@@ -9,9 +9,7 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    /**
-     * Esegue prima di ogni test.
-     */
+  
     protected function setUp(): void
     {
         parent::setUp();

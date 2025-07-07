@@ -48,7 +48,7 @@ class BookingController extends Controller
         $start = Carbon::parse($validatedData['start_time']);
         $end = Carbon::parse($validatedData['end_time']);
 
-        // Controllo disponibilità del campo
+       
         if (!$field->is_available) {
             throw ValidationException::withMessages([
                 'field_id' => 'The selected field is not available for booking.',

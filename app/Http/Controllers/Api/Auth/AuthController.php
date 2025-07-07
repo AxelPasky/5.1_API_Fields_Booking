@@ -89,7 +89,7 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        // Revoca il token di accesso corrente
+       
         $request->user()->token()->revoke();
 
         return response()->json(['message' => 'Logged out successfully']);
@@ -102,7 +102,7 @@ class AuthController extends Controller
      */
     public function user(Request $request)
     {
-        // 2. Usa la risorsa per formattare l'output
+     
         return new UserResource($request->user());
     }
 
