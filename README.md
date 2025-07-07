@@ -1,7 +1,7 @@
 # Field Booking System API
 
 A modern RESTful API built with Laravel for managing and booking sports fields.  
-This project is the result of a complete refactoring from an MVC web app to a secure, fully tested API with role-based access, advanced business logic, and comprehensive documentation.
+This project is a refactored, secure, and fully tested API with role-based access, advanced business logic, and comprehensive documentation.
 
 ---
 
@@ -14,14 +14,12 @@ This project is the result of a complete refactoring from an MVC web app to a se
 - **Statistics:** Admin endpoints for revenue and field performance.
 - **Comprehensive Testing:** All endpoints are covered by feature tests (TDD).
 - **API Documentation:** Auto-generated with Scribe, including example requests/responses and Postman/OpenAPI export.
-- **Postman Ready:** Easily test all endpoints with the included Postman collection.
 
 ---
 
 ## Project Structure & Approach
 
-- **Controllers:** Only orchestrate requests and responses; no business logic.
-- **Business Logic:** Encapsulated in service classes and policies for maintainability.
+- **Controllers:** Orchestrate requests and responses; business logic is in services/policies.
 - **Validation:** Handled via Form Requests or inline validation.
 - **Authorization:** Managed via policies and explicit checks in controllers.
 - **Testing:** Test-Driven Development (TDD) for all features and edge cases.
@@ -43,14 +41,14 @@ This project is the result of a complete refactoring from an MVC web app to a se
 
 - PHP >= 8.2
 - Composer
-- Node.js & NPM
+- Node.js & NPM (for asset build, required for Scribe and docs)
 - MySQL or compatible database
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/your-repository.git
-cd your-repository
+git clone https://github.com/AxelPasky/5.1_API_Fields_Booking.git
+cd 5.1_API_Fields_Booking
 ```
 
 ### 2. Install Dependencies
@@ -130,7 +128,8 @@ The docs include:
    - Make sure the `baseUrl` variable in Postman is set to `http://localhost:8000` (or your server address).
 
 3. **Authentication Flow**
-   - Use `POST /api/login` or `POST /api/register` to obtain an `access_token`.
+   - Register a user via `POST /api/register` (or use demo credentials).
+   - Log in via `POST /api/login` to obtain an `access_token`.
    - For all protected endpoints, add this header:
      ```
      Authorization: Bearer {access_token}
@@ -168,3 +167,8 @@ php artisan test
 ## License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+---
+
+**Note:**  
+- Running `npm install` and `npm run build` is required for the documentation and any frontend assets to work correctly, even if the API is your main focus.
