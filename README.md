@@ -41,7 +41,7 @@ This project is a secure, fully tested API with role-based access, advanced busi
 
 - PHP >= 8.2
 - Composer
-- MySQL or compatible database
+- **MySQL** or compatible database (SQLite is NOT recommended, see note below)
 
 ### 1. Clone the Repository
 
@@ -56,28 +56,58 @@ cd 5.1_API_Fields_Booking
 composer install
 ```
 
-### 3. Environment Configuration
+### 3. Create the Database
 
+Create a new MySQL database (e.g. `fields_booking`) using your preferred tool (phpMyAdmin, MySQL Workbench, CLI, etc.).
+
+### 4. Environment Configuration
+
+Copy the example environment file and generate the app key:
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
-Edit `.env` and set your database credentials.
+Edit the `.env` file and set your database connection details:
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=fields_booking
+DB_USERNAME=your_mysql_user
+DB_PASSWORD=your_mysql_password
+```
 
-### 4. Database Migration and Seeding
+> **Note:**  
+> This project is designed to work with MySQL.  
+> Using SQLite may cause issues with OAuth (Passport) tables and is not recommended for development or production.
+
+### 5. Database Migration and Seeding
 
 ```bash
 php artisan migrate:fresh --seed
 ```
-This creates demo users and fields.
+This creates demo users, fields, and the necessary Passport clients.
 
-### 5. Storage Link
+### 6. Passport Personal Access Client
+
+After running the migrations and seeders, check the `oauth_clients` table for the Personal Access Client.
+Update the following variables in your `.env` file with the correct values:
+
+```
+PASSPORT_PERSONAL_ACCESS_CLIENT_ID=1
+PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET=your_generated_secret
+```
+
+If you reseed or reset the database, these values may change.  
+You can find them in the `oauth_clients` table (look for the row with `personal_access` in the `grant_types` column).
+
+### 7. Storage Link
 
 ```bash
 php artisan storage:link
 ```
 
-### 6. Run the Server
+### 8. Run the Server
 
 ```bash
 php artisan serve
