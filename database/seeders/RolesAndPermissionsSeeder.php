@@ -14,15 +14,12 @@ class RolesAndPermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-        // Reset cached roles and permissions
+        
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Create roles
+       
         $adminRole = Role::create(['name' => 'Admin']);
         $userRole = Role::create(['name' => 'User']);
 
-        // Qui in futuro potremmo aggiungere i permessi, es:
-        // Permission::create(['name' => 'delete bookings']);
-        // $adminRole->givePermissionTo('delete bookings');
     }
 }

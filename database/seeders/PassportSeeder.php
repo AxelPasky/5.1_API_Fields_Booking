@@ -12,14 +12,17 @@ class PassportSeeder extends Seeder
      */
     public function run(): void
     {
-        // Pulisce la tabella prima di inserirli per evitare duplicati
+        
         DB::table('oauth_clients')->truncate();
 
-        // Crea il Personal Access Client
+     
+        $personalClientId = $this->getPersonalClientId();
+        $personalClientSecret = $this->getPersonalClientSecret();
+
         DB::table('oauth_clients')->insert([
-            'id' => env('PASSPORT_PERSONAL_ACCESS_CLIENT_ID'),
+            'id' => $personalClientId,
             'name' => 'Personal Access Client',
-            'secret' => 'dummy-secret-for-personal-client', // Secret in chiaro
+            'secret' => $personalClientSecret,
             'provider' => 'users',
             'redirect_uris' => '[]',
             'grant_types' => '["personal_access"]',
@@ -28,17 +31,45 @@ class PassportSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        // Crea il Password Grant Client
-        DB::table('oauth_clients')->insert([
-            'id' => env('PASSPORT_PASSWORD_GRANT_CLIENT_ID'),
-            'name' => 'Password Grant Client',
-            'secret' => env('PASSPORT_PASSWORD_GRANT_CLIENT_SECRET'), // <-- Usiamo un secret in chiaro
-            'provider' => 'users',
-            'redirect_uris' => '[]',
-            'grant_types' => '["password", "refresh_token"]',
-            'revoked' => 0,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        
+        if (env('PASSPORT_PASSWORD_GRANT_CLIENT_ID')) {
+            DB::table('oauth_clients')->insert([
+                'id' => env('PASSPORT_PASSWORD_GRANT_CLIENT_ID'),
+                'name' => 'Password Grant Client',
+                'secret' => env('PASSPORT_PASSWORD_GRANT_CLIENT_SECRET'),
+                'provider' => 'users',
+                'redirect_uris' => '[]',
+                'grant_types' => '["password", "refresh_token"]',
+                'revoked' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+    }
+
+    private function getPersonalClientId(): int
+    {
+     
+        if (app()->environment('testing')) {
+            return 1;
+        }
+
+       
+        return env('PASSPORT_PERSONAL_ACCESS_CLIENT_ID', 1);
+    }
+
+    private function getPersonalClientSecret(): string
+    {
+       
+        if (app()->environment('testing')) {
+            return 'test-secret-for-personal-client';
+        }
+
+     
+        if (env('PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET')) {
+            return env('PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET');
+        }
+
+        return 'REPLACE-WITH-ACTUAL-SECRET-FROM-PASSPORT-INSTALL';
     }
 }
