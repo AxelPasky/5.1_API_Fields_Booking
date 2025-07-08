@@ -1,7 +1,7 @@
 # Field Booking System API
 
 A modern RESTful API built with Laravel for managing and booking sports fields.  
-This project is the result of a complete refactoring from an MVC web app to a secure, fully tested API with role-based access, advanced business logic, and comprehensive documentation.
+This project is a secure, fully tested API with role-based access, advanced business logic, and comprehensive documentation.
 
 ---
 
@@ -14,14 +14,12 @@ This project is the result of a complete refactoring from an MVC web app to a se
 - **Statistics:** Admin endpoints for revenue and field performance.
 - **Comprehensive Testing:** All endpoints are covered by feature tests (TDD).
 - **API Documentation:** Auto-generated with Scribe, including example requests/responses and Postman/OpenAPI export.
-- **Postman Ready:** Easily test all endpoints with the included Postman collection.
 
 ---
 
 ## Project Structure & Approach
 
-- **Controllers:** Only orchestrate requests and responses; no business logic.
-- **Business Logic:** Encapsulated in service classes and policies for maintainability.
+- **Controllers:** Orchestrate requests and responses; business logic is in services/policies.
 - **Validation:** Handled via Form Requests or inline validation.
 - **Authorization:** Managed via policies and explicit checks in controllers.
 - **Testing:** Test-Driven Development (TDD) for all features and edge cases.
@@ -43,48 +41,75 @@ This project is the result of a complete refactoring from an MVC web app to a se
 
 - PHP >= 8.2
 - Composer
-- Node.js & NPM
-- MySQL or compatible database
+- **MySQL** or compatible database (SQLite is NOT recommended, see note below)
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/your-repository.git
-cd your-repository
+git clone https://github.com/AxelPasky/5.1_API_Fields_Booking.git
+cd 5.1_API_Fields_Booking
 ```
 
 ### 2. Install Dependencies
 
 ```bash
 composer install
-npm install
 ```
 
-### 3. Environment Configuration
+### 3. Create the Database
 
+Create a new MySQL database (e.g. `fields_booking`) using your preferred tool (phpMyAdmin, MySQL Workbench, CLI, etc.).
+
+### 4. Environment Configuration
+
+Copy the example environment file and generate the app key:
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
-Edit `.env` and set your database credentials.
+Edit the `.env` file and set your database connection details:
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=fields_booking
+DB_USERNAME=your_mysql_user
+DB_PASSWORD=your_mysql_password
+```
 
-### 4. Database Migration and Seeding
+> **Note:**  
+> This project is designed to work with MySQL.  
+> Using SQLite may cause issues with OAuth (Passport) tables and is not recommended for development or production.
+
+### 5. Database Migration and Seeding
 
 ```bash
 php artisan migrate:fresh --seed
 ```
-This creates demo users and fields.
+This creates demo users, fields, and the necessary Passport clients.
 
-### 5. Storage Link
+### 6. Passport Personal Access Client
+
+After running the migrations and seeders, check the `oauth_clients` table for the Personal Access Client.
+Update the following variables in your `.env` file with the correct values:
+
+```
+PASSPORT_PERSONAL_ACCESS_CLIENT_ID=1
+PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET=your_generated_secret
+```
+
+If you reseed or reset the database, these values may change.  
+You can find them in the `oauth_clients` table (look for the row with `personal_access` in the `grant_types` column).
+
+### 7. Storage Link
 
 ```bash
 php artisan storage:link
 ```
 
-### 6. Build Assets and Run the Server
+### 8. Run the Server
 
 ```bash
-npm run build
 php artisan serve
 ```
 The API will be available at `http://127.0.0.1:8000`.
@@ -130,7 +155,8 @@ The docs include:
    - Make sure the `baseUrl` variable in Postman is set to `http://localhost:8000` (or your server address).
 
 3. **Authentication Flow**
-   - Use `POST /api/login` or `POST /api/register` to obtain an `access_token`.
+   - Register a user via `POST /api/register` (or use demo credentials).
+   - Log in via `POST /api/login` to obtain an `access_token`.
    - For all protected endpoints, add this header:
      ```
      Authorization: Bearer {access_token}
@@ -168,3 +194,10 @@ php artisan test
 ## License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+---
+
+**Note:**  
+This project is a pure API and does **not** require Node.js, NPM, or any frontend asset build steps.  
+You can safely ignore or delete any Node.js-related files.
+

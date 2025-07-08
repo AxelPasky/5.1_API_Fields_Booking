@@ -14,14 +14,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Esegui il seeder per i client di Passport
+       
         $this->call(PassportSeeder::class);
-
-        // 2. Esegui il seeder per ruoli e permessi
+   
         $this->call(RolesAndPermissionsSeeder::class);
 
-        // 3. Crea gli utenti e assegna i ruoli
-        // Crea l'utente Admin
         $admin = User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@example.com',
@@ -30,7 +27,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $admin->assignRole('Admin');
 
-        // Crea l'utente normale
+    
         $user = User::factory()->create([
             'name' => 'Test User',
             'email' => 'user@example.com',
@@ -39,7 +36,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $user->assignRole('User');
 
-        // Crea i campi
+      
         Field::factory(5)->create();
     }
 }
