@@ -2,8 +2,6 @@
 
 A modern RESTful API built with Laravel for managing and booking sports fields.
 
-A modern RESTful API built with Laravel for managing and booking sports fields.
-
 This project is a secure, fully tested API with role-based access, advanced business logic, and comprehensive documentation.
 
 ---
@@ -47,8 +45,6 @@ This project is a secure, fully tested API with role-based access, advanced busi
 - **MySQL** or compatible database (SQLite is NOT recommended, see note below)
 - Ensure all required PHP extensions for Laravel are enabled (e.g., PDO, Mbstring, XML, Ctype). If `composer install` fails, checking your enabled extensions is a good first step. 
 (should be sodium extension on php.ini file. Raw 958 +- ;)
-- Ensure all required PHP extensions for Laravel are enabled (e.g., PDO, Mbstring, XML, Ctype). If `composer install` fails, checking your enabled extensions is a good first step. 
-(should be sodium extension on php.ini file. Raw 958 +- ;)
 
 ### 1. Clone the Repository
 
@@ -71,15 +67,12 @@ Create a new MySQL database (e.g. `fields_booking`) using your preferred tool (p
 
 Copy the example environment file and generate the app key:
 
-
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-
 Edit the `.env` file and set your database connection details:
-
 
 ```
 DB_CONNECTION=mysql
@@ -90,8 +83,6 @@ DB_USERNAME=your_mysql_user
 DB_PASSWORD=your_mysql_password
 ```
 
-> **Note:**
-> This project is designed to work with MySQL.
 > **Note:**
 > This project is designed to work with MySQL.
 > Using SQLite may cause issues with OAuth (Passport) tables and is not recommended for development or production.
@@ -134,17 +125,12 @@ Now, update the `.env` file with these values:
 
 ```
 # The 'id' from the oauth_clients table
-# The 'id' from the oauth_clients table
 PASSPORT_PERSONAL_ACCESS_CLIENT_ID=1
-
-# The 'secret' from the oauth_clients table
-PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET=your_generated_secret_from_the_database
 
 # The 'secret' from the oauth_clients table
 PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET=your_generated_secret_from_the_database
 ```
 
-If you ever re-run `migrate:fresh --seed`, a new secret will be generated, and you will need to repeat this step.
 If you ever re-run `migrate:fresh --seed`, a new secret will be generated, and you will need to repeat this step.
 
 ### 8. Storage Link
@@ -199,23 +185,10 @@ The docs include:
 1.  **Import the Collection**
     - Download from [http://localhost:8000/docs.postman](http://localhost:8000/docs.postman)
     - In Postman, click "Import" and select the downloaded file.
-1.  **Import the Collection**
-    - Download from [http://localhost:8000/docs.postman](http://localhost:8000/docs.postman)
-    - In Postman, click "Import" and select the downloaded file.
 
 2.  **Set the Base URL**
     - Make sure the `baseUrl` variable in Postman is set to `http://localhost:8000` (or your server address).
-2.  **Set the Base URL**
-    - Make sure the `baseUrl` variable in Postman is set to `http://localhost:8000` (or your server address).
 
-3.  **Authentication Flow**
-    - Register a user via `POST /api/register` (or use demo credentials).
-    - Log in via `POST /api/login` to obtain an `access_token`.
-    - For all protected endpoints, add this header:
-      ```
-      Authorization: Bearer {access_token}
-      ```
-    - In Postman, you can set this as a "Bearer Token" in the Authorization tab or as a header.
 3.  **Authentication Flow**
     - Register a user via `POST /api/register` (or use demo credentials).
     - Log in via `POST /api/login` to obtain an `access_token`.
@@ -228,13 +201,7 @@ The docs include:
 4.  **Try the Endpoints**
     - Use the provided demo credentials or register a new user.
     - Test all endpoints: fields, bookings, statistics, etc.
-4.  **Try the Endpoints**
-    - Use the provided demo credentials or register a new user.
-    - Test all endpoints: fields, bookings, statistics, etc.
 
-5.  **Troubleshooting**
-    - `401 Unauthorized`: Make sure you included the correct token and updated the Passport client details in your `.env` file.
-    - `422 Unprocessable Entity`: Check required fields and validation rules in the docs.
 5.  **Troubleshooting**
     - `401 Unauthorized`: Make sure you included the correct token and updated the Passport client details in your `.env` file.
     - `422 Unprocessable Entity`: Check required fields and validation rules in the docs.
@@ -265,8 +232,6 @@ This project is open-sourced software licensed under the [MIT license](https://o
 
 ---
 
-**Note:**
-This project is a pure API and does **not** require Node.js, NPM, or any frontend asset build steps.
 **Note:**
 This project is a pure API and does **not** require Node.js, NPM, or any frontend asset build steps.
 You can safely ignore or delete any Node.js-related files.
