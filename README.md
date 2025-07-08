@@ -87,59 +87,59 @@ DB_PASSWORD=your_mysql_password
 > This project is designed to work with MySQL.
 > Using SQLite may cause issues with OAuth (Passport) tables and is not recommended for development or production.
 
-### 5. Install Laravel Passport
+### 5. Database and Passport Setup
 
-This is a critical step. Before seeding the database, you must install Laravel Passport to create its required database tables.
+This is a critical step. We will create the database tables and the necessary OAuth clients for authentication.
 
-```bash
-php artisan passport:install
-```
-
-> You will be prompted twice. **It is essential to answer `yes` to both prompts:**
-> 1.  `Would you like to run all pending database migrations?` -> **yes**
-> 2.  `Would you like to create the "personal access" grant client?` -> **yes**
->
-> This ensures the necessary `oauth_clients` table exists before the database is seeded in the next step.
-
-### 6. Database Migration and Seeding
-
-Now, run the migrations and seeders to create a clean database schema and populate it with demo data.
+First, run the migrations and the seeders. This command will create the database structure and populate it with demo data, including the default Passport clients.
 
 ```bash
 php artisan migrate:fresh --seed
 ```
 
-> **Note:** This command will drop all tables (including the ones Passport just created) and rebuild the entire database from scratch. This is the intended behavior and ensures a clean, predictable state for the application.
+### 6. Passport Client Configuration (.env)
 
-### 7. Passport Client Configuration (.env)
-
-This is a critical step to ensure the API can issue access tokens correctly. The seeder creates a "Personal Access Client" that your application uses. You must copy its credentials from the database into your `.env` file.
+For the API to issue access tokens correctly (especially for login), you must copy the credentials of the OAuth clients from your database into your `.env` file.
 
 **How to find the credentials:**
 
-1.  Open your MySQL database and look at the `oauth_clients` table.
-2.  Find the row where the `name` is "Laravel Personal Access Client".
-3.  Copy the `id` and `secret` values from this row.
+1.  Open your MySQL database (with phpMyAdmin, etc.) and look at the `oauth_clients` table.
+2.  You should see two rows: one named "Laravel Personal Access Client" and another named "Laravel Password Grant Client".
+3.  Copy the `id` and `secret` values from **both** rows.
 
-Now, update the `.env` file with these values:
+Now, update the `.env` file with these four values:
 
+```properties
+# .env file
+
+# From the "Personal Access Client" row
+PASSPORT_PERSONAL_ACCESS_CLIENT_ID=...
+PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET=...
+
+# From the "Password Grant Client" row
+PASSPORT_PASSWORD_GRANT_CLIENT_ID=...
+PASSPORT_PASSWORD_GRANT_CLIENT_SECRET=...
 ```
-# The 'id' from the oauth_clients table
-PASSPORT_PERSONAL_ACCESS_CLIENT_ID=1
 
-# The 'secret' from the oauth_clients table
-PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET=your_generated_secret_from_the_database
-```
+> ### **Important Note: What if the "Password Grant Client" is missing?**
+>
+> If you only see one row in the `oauth_clients` table after seeding, the "Password Grant Client" (essential for user login) was not created.
+>
+> **To fix this, run this command in your terminal:**
+>
+> ```bash
+> php artisan passport:client --password
+> ```
+>
+> This will generate the missing client and give you its `Client ID` and `Client Secret`. Copy these new credentials into the `PASSPORT_PASSWORD_GRANT_CLIENT_ID` and `PASSPORT_PASSWORD_GRANT_CLIENT_SECRET` variables in your `.env` file.
 
-If you ever re-run `migrate:fresh --seed`, a new secret will be generated, and you will need to repeat this step.
-
-### 8. Storage Link
+### 7. Storage Link
 
 ```bash
 php artisan storage:link
 ```
 
-### 9. Run the Server & View Documentation
+### 8. Run the Server & View Documentation
 
 ```bash
 php artisan serve
