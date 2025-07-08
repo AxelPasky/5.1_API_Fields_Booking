@@ -28,5 +28,8 @@ RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
 # Esponi la porta 9000 per PHP-FPM
 EXPOSE 9000
 
+# Imposta il nuovo entrypoint
+ENTRYPOINT ["entrypoint.sh"]
+
 # Comando di avvio
 CMD ["php-fpm"]
