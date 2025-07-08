@@ -11,10 +11,13 @@ RUN composer install --no-dev --no-interaction --optimize-autoloader
 # Usa un'immagine PHP-FPM per l'esecuzione
 FROM php:8.2-fpm
 
-# Installa le estensioni PHP necessarie, INCLUSO pdo_mysql
+# Installa le dipendenze di sistema e le estensioni PHP
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     unzip \
+    git \
+    procps \
+    netcat-openbsd \
     && docker-php-ext-install zip pdo_mysql
 
 # Copia i file dell'applicazione e le dipendenze installate
