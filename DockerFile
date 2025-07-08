@@ -1,0 +1,29 @@
+# Usa un'immagine PHP Alpine, molto più leggera e veloce
+FROM php:8.2-cli-alpine
+
+# Installa le dipendenze di sistema minime necessarie
+RUN apk add --no-cache unzip zip git procps netcat-openbsd
+
+# Installa le estensioni PHP necessarie
+RUN docker-php-ext-install pdo pdo_mysql zip
+
+# Installa Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Imposta la cartella di lavoro
+WORKDIR /app
+
+# Copia solo i file di composer e installa le dipendenze
+# Questo ottimizza la cache di Docker
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-interaction --optimize-autoloader
+
+# Copia il resto del codice dell'applicazione
+COPY . .
+
+# Copia lo script di avvio e rendilo eseguibile
+COPY entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Imposta lo script come punto di ingresso del container
+ENTRYPOINT ["entrypoint.sh"]
