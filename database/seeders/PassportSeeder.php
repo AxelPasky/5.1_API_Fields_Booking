@@ -47,7 +47,7 @@ class PassportSeeder extends Seeder
         }
     }
 
-    private function getPersonalClientId(): int
+    private function getPersonalClientId(): int|string
     {
      
         if (app()->environment('testing')) {
