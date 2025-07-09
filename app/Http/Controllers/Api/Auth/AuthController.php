@@ -60,50 +60,28 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        try {
-            \Log::info('Register attempt', ['email' => $request->email]);
-            
-            $request->validate([
-                'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-                'password' => ['required', 'string', 'min:8', 'confirmed'],
-            ]);
+        // Aggiungi validazione per password_confirmation
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'password_confirmation' => 'required'
+        ]);
 
-            \Log::info('Validation passed');
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
+        ]);
 
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'is_admin' => false,
-            ]);
+        $user->assignRole('User');
+        $token = $user->createToken('auth-token')->accessToken;
 
-            \Log::info('User created', ['user_id' => $user->id]);
-
-            $user->assignRole('User');
-            
-            \Log::info('Role assigned');
-
-            // Qui potrebbe essere il problema
-            $token = $user->createToken('auth-token')->accessToken;
-            
-            \Log::info('Token created');
-
-            return response()->json([
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-            ]);
-        } catch (\Exception $e) {
-            \Log::error('Registration error', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            
-            return response()->json([
-                'error' => 'Registration failed',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        // Cambia il codice di stato a 201 (Created)
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+        ], 201);
     }
 
     /**
