@@ -19,6 +19,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/health', function () {
+    try {
+        $dbConnection = DB::connection()->getPdo();
+        $tables = DB::select('SHOW TABLES');
+        
+        return response()->json([
+            'status' => 'ok',
+            'database' => 'connected',
+            'tables_count' => count($tables),
+            'tables' => $tables
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'database' => 'not connected',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+});
+
+
 // PUBLIC
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
