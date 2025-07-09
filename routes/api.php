@@ -75,3 +75,14 @@ Route::middleware(['auth:api', 'role:Admin'])->prefix('admin')->group(function (
     Route::put('/fields/{field}', [AdminFieldController::class, 'update']);
     Route::delete('/fields/{field}', [AdminFieldController::class, 'destroy']);
 });
+
+Route::get('/debug-oauth', function () {
+    $clients = \DB::table('oauth_clients')->get();
+    return response()->json([
+        'clients' => $clients,
+        'personal_client_id' => env('PASSPORT_PERSONAL_ACCESS_CLIENT_ID'),
+        'personal_client_secret' => env('PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET'),
+        'password_client_id' => env('PASSPORT_PASSWORD_GRANT_CLIENT_ID'),
+        'password_client_secret' => env('PASSPORT_PASSWORD_GRANT_CLIENT_SECRET'),
+    ]);
+});
