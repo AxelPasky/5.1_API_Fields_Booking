@@ -26,7 +26,7 @@
             </style>
 
     <script>
-        var tryItOutBaseUrl = "http://localhost:8000";
+        var tryItOutBaseUrl = "https://api-booking-fields.up.railway.app";
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
@@ -173,7 +173,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: July 7, 2025</li>
+        <li>Last updated: July 9, 2025</li>
     </ul>
 </div>
 
@@ -259,7 +259,7 @@
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/admin/statistics/revenue" \
+    --get "https://api-booking-fields.up.railway.app/api/admin/statistics/revenue" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -267,7 +267,7 @@
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/admin/statistics/revenue"
+    "https://api-booking-fields.up.railway.app/api/admin/statistics/revenue"
 );
 
 const headers = {
@@ -397,7 +397,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/admin/statistics/field-performance" \
+    --get "https://api-booking-fields.up.railway.app/api/admin/statistics/field-performance" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -405,7 +405,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/admin/statistics/field-performance"
+    "https://api-booking-fields.up.railway.app/api/admin/statistics/field-performance"
 );
 
 const headers = {
@@ -535,7 +535,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/admin/fields" \
+    "https://api-booking-fields.up.railway.app/api/admin/fields" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -550,7 +550,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/admin/fields"
+    "https://api-booking-fields.up.railway.app/api/admin/fields"
 );
 
 const headers = {
@@ -727,7 +727,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost:8000/api/admin/fields/1" \
+    "https://api-booking-fields.up.railway.app/api/admin/fields/1" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -735,14 +735,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"name\": \"vmqeopfuudtdsufvyvddq\",
     \"type\": \"consequatur\",
     \"price_per_hour\": 45,
-    \"is_available\": true
+    \"is_available\": false
 }"
 </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/admin/fields/1"
+    "https://api-booking-fields.up.railway.app/api/admin/fields/1"
 );
 
 const headers = {
@@ -755,7 +755,7 @@ let body = {
     "name": "vmqeopfuudtdsufvyvddq",
     "type": "consequatur",
     "price_per_hour": 45,
-    "is_available": true
+    "is_available": false
 };
 
 fetch(url, {
@@ -913,7 +913,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
         </form>
 
@@ -931,7 +931,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost:8000/api/admin/fields/1" \
+    "https://api-booking-fields.up.railway.app/api/admin/fields/1" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -939,7 +939,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/admin/fields/1"
+    "https://api-booking-fields.up.railway.app/api/admin/fields/1"
 );
 
 const headers = {
@@ -1069,7 +1069,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/login" \
+    "https://api-booking-fields.up.railway.app/api/login" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -1082,7 +1082,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/login"
+    "https://api-booking-fields.up.railway.app/api/login"
 );
 
 const headers = {
@@ -1225,7 +1225,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/register" \
+    "https://api-booking-fields.up.railway.app/api/register" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -1240,7 +1240,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/register"
+    "https://api-booking-fields.up.railway.app/api/register"
 );
 
 const headers = {
@@ -1412,7 +1412,7 @@ These endpoints are accessible to all users.</p>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/fields" \
+    --get "https://api-booking-fields.up.railway.app/api/fields" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1420,7 +1420,7 @@ These endpoints are accessible to all users.</p>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/fields"
+    "https://api-booking-fields.up.railway.app/api/fields"
 );
 
 const headers = {
@@ -1550,7 +1550,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/fields/1" \
+    --get "https://api-booking-fields.up.railway.app/api/fields/1" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1558,7 +1558,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/fields/1"
+    "https://api-booking-fields.up.railway.app/api/fields/1"
 );
 
 const headers = {
@@ -1700,19 +1700,19 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/fields/1/availability" \
+    --get "https://api-booking-fields.up.railway.app/api/fields/1/availability" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"date\": \"2025-07-07\"
+    \"date\": \"2025-07-09\"
 }"
 </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/fields/1/availability"
+    "https://api-booking-fields.up.railway.app/api/fields/1/availability"
 );
 
 const headers = {
@@ -1722,7 +1722,7 @@ const headers = {
 };
 
 let body = {
-    "date": "2025-07-07"
+    "date": "2025-07-09"
 };
 
 fetch(url, {
@@ -1850,10 +1850,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="date"                data-endpoint="GETapi-fields--field_id--availability"
-               value="2025-07-07"
+               value="2025-07-09"
                data-component="body">
     <br>
-<p>Must be a valid date in the format <code>Y-m-d</code>. Example: <code>2025-07-07</code></p>
+<p>Must be a valid date in the format <code>Y-m-d</code>. Example: <code>2025-07-09</code></p>
         </div>
         </form>
 
@@ -1875,7 +1875,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/user" \
+    --get "https://api-booking-fields.up.railway.app/api/user" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1883,7 +1883,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/user"
+    "https://api-booking-fields.up.railway.app/api/user"
 );
 
 const headers = {
@@ -2013,7 +2013,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost:8000/api/user" \
+    "https://api-booking-fields.up.railway.app/api/user" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -2026,7 +2026,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/user"
+    "https://api-booking-fields.up.railway.app/api/user"
 );
 
 const headers = {
@@ -2169,7 +2169,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/logout" \
+    "https://api-booking-fields.up.railway.app/api/logout" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2177,7 +2177,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/logout"
+    "https://api-booking-fields.up.railway.app/api/logout"
 );
 
 const headers = {
@@ -2291,21 +2291,21 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/bookings/calculate-price" \
+    "https://api-booking-fields.up.railway.app/api/bookings/calculate-price" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
     \"field_id\": \"consequatur\",
-    \"start_time\": \"2106-08-06\",
-    \"end_time\": \"2106-08-05\"
+    \"start_time\": \"2106-08-08\",
+    \"end_time\": \"2106-08-08\"
 }"
 </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/bookings/calculate-price"
+    "https://api-booking-fields.up.railway.app/api/bookings/calculate-price"
 );
 
 const headers = {
@@ -2316,8 +2316,8 @@ const headers = {
 
 let body = {
     "field_id": "consequatur",
-    "start_time": "2106-08-06",
-    "end_time": "2106-08-05"
+    "start_time": "2106-08-08",
+    "end_time": "2106-08-08"
 };
 
 fetch(url, {
@@ -2428,10 +2428,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="start_time"                data-endpoint="POSTapi-bookings-calculate-price"
-               value="2106-08-06"
+               value="2106-08-08"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2106-08-06</code></p>
+<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2106-08-08</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>end_time</code></b>&nbsp;&nbsp;
@@ -2439,10 +2439,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="end_time"                data-endpoint="POSTapi-bookings-calculate-price"
-               value="2106-08-05"
+               value="2106-08-08"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after <code>start_time</code>. Example: <code>2106-08-05</code></p>
+<p>Must be a valid date. Must be a date after <code>start_time</code>. Example: <code>2106-08-08</code></p>
         </div>
         </form>
 
@@ -2460,7 +2460,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/bookings" \
+    --get "https://api-booking-fields.up.railway.app/api/bookings" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2468,7 +2468,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/bookings"
+    "https://api-booking-fields.up.railway.app/api/bookings"
 );
 
 const headers = {
@@ -2598,7 +2598,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/bookings/17" \
+    --get "https://api-booking-fields.up.railway.app/api/bookings/17" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2606,7 +2606,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/bookings/17"
+    "https://api-booking-fields.up.railway.app/api/bookings/17"
 );
 
 const headers = {
@@ -2748,21 +2748,21 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/bookings" \
+    "https://api-booking-fields.up.railway.app/api/bookings" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
     \"field_id\": \"consequatur\",
-    \"start_time\": \"2106-08-06\",
-    \"end_time\": \"2106-08-05\"
+    \"start_time\": \"2106-08-08\",
+    \"end_time\": \"2106-08-08\"
 }"
 </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/bookings"
+    "https://api-booking-fields.up.railway.app/api/bookings"
 );
 
 const headers = {
@@ -2773,8 +2773,8 @@ const headers = {
 
 let body = {
     "field_id": "consequatur",
-    "start_time": "2106-08-06",
-    "end_time": "2106-08-05"
+    "start_time": "2106-08-08",
+    "end_time": "2106-08-08"
 };
 
 fetch(url, {
@@ -2885,10 +2885,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="start_time"                data-endpoint="POSTapi-bookings"
-               value="2106-08-06"
+               value="2106-08-08"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2106-08-06</code></p>
+<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2106-08-08</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>end_time</code></b>&nbsp;&nbsp;
@@ -2896,10 +2896,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="end_time"                data-endpoint="POSTapi-bookings"
-               value="2106-08-05"
+               value="2106-08-08"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after <code>start_time</code>. Example: <code>2106-08-05</code></p>
+<p>Must be a valid date. Must be a date after <code>start_time</code>. Example: <code>2106-08-08</code></p>
         </div>
         </form>
 
@@ -2917,20 +2917,20 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost:8000/api/bookings/17" \
+    "https://api-booking-fields.up.railway.app/api/bookings/17" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"start_time\": \"2106-08-06\",
-    \"end_time\": \"2106-08-05\"
+    \"start_time\": \"2106-08-08\",
+    \"end_time\": \"2106-08-08\"
 }"
 </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/bookings/17"
+    "https://api-booking-fields.up.railway.app/api/bookings/17"
 );
 
 const headers = {
@@ -2940,8 +2940,8 @@ const headers = {
 };
 
 let body = {
-    "start_time": "2106-08-06",
-    "end_time": "2106-08-05"
+    "start_time": "2106-08-08",
+    "end_time": "2106-08-08"
 };
 
 fetch(url, {
@@ -3053,10 +3053,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="start_time"                data-endpoint="PUTapi-bookings--booking_id-"
-               value="2106-08-06"
+               value="2106-08-08"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2106-08-06</code></p>
+<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2106-08-08</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>end_time</code></b>&nbsp;&nbsp;
@@ -3064,10 +3064,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="end_time"                data-endpoint="PUTapi-bookings--booking_id-"
-               value="2106-08-05"
+               value="2106-08-08"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after <code>start_time</code>. Example: <code>2106-08-05</code></p>
+<p>Must be a valid date. Must be a date after <code>start_time</code>. Example: <code>2106-08-08</code></p>
         </div>
         </form>
 
@@ -3085,7 +3085,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost:8000/api/bookings/17" \
+    "https://api-booking-fields.up.railway.app/api/bookings/17" \
     --header "Authorization: Bearer Bearer {TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3093,7 +3093,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/bookings/17"
+    "https://api-booking-fields.up.railway.app/api/bookings/17"
 );
 
 const headers = {
