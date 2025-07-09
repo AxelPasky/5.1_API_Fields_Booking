@@ -1,11 +1,17 @@
 #!/bin/sh
 
-echo "Starting Laravel server..."
+echo "Starting application setup..."
 
-# Pulisci la cache per sicurezza
+# Esegui le migrazioni (usa 'migrate' invece di 'migrate:fresh' per non perdere dati)
+echo "Running migrations..."
+php artisan migrate --force
+
+# Pulisci la cache
+echo "Clearing cache..."
 php artisan config:clear
 php artisan route:clear
 
 # Avvia il server
-echo "Starting server on port ${PORT:-8080}..."
-exec php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
+PORT="${PORT:-8080}"
+echo "Starting Laravel server on port $PORT..."
+exec php artisan serve --host=0.0.0.0 --port="$PORT"
