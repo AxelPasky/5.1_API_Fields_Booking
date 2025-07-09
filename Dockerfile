@@ -2,34 +2,43 @@
 FROM composer:2 as dependencies
 WORKDIR /app
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-autoloader --ignore-platform-reqs
+RUN composer install --no-dev --no-scripts --no-autoloader --ignore-platform-reqs --prefer-dist
 
 # Stage 2: Production image
 FROM php:8.2-cli-alpine
 
-# Installa dipendenze essenziali in un solo comando per velocizzare
-RUN apk add --no-cache \
-    postgresql-dev \
-    && docker-php-ext-install pdo pdo_mysql \
-    && apk del postgresql-dev
+# Installa solo le estensioni PHP necessarie
+RUN docker-php-ext-install pdo pdo_mysql
 
-# Copia le dipendenze dal primo stage
+# Imposta la directory di lavoro
 WORKDIR /app
-COPY --from=dependencies /app/vendor vendor/
-COPY . .
 
-# Copia composer dal primo stage per poter eseguire dump-autoload
+# Copia prima solo i vendor (layer cacheable)
+COPY --from=dependencies /app/vendor vendor/
+
+# Copia solo i file necessari per l'applicazione
+COPY app app/
+COPY bootstrap bootstrap/
+COPY config config/
+COPY database database/
+COPY public public/
+COPY resources resources/
+COPY routes routes/
+COPY storage storage/
+COPY artisan composer.json composer.lock ./
+
+# Copia composer per dump-autoload
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Genera l'autoloader ottimizzato
-RUN composer dump-autoload --optimize --no-dev
+# Genera l'autoloader
+RUN composer dump-autoload --optimize --no-dev --classmap-authoritative
 
-# Copia lo script di avvio
-COPY start.sh /app/start.sh
-RUN chmod +x /app/start.sh
+# Copia e prepara lo script di avvio
+COPY start.sh ./
+RUN chmod +x start.sh
 
 # Esponi la porta
 EXPOSE 8080
 
-# Usa lo script di avvio
-CMD ["/app/start.sh"]
+# Avvia l'applicazione
+CMD ["./start.sh"]
