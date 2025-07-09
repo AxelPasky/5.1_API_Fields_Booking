@@ -18,6 +18,9 @@ WORKDIR /app
 COPY --from=dependencies /app/vendor vendor/
 COPY . .
 
+# Copia composer dal primo stage per poter eseguire dump-autoload
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
 # Genera l'autoloader ottimizzato
 RUN composer dump-autoload --optimize --no-dev
 
