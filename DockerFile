@@ -1,29 +1,28 @@
-# Usa un'immagine PHP Alpine, molto più leggera e veloce
+# Stage 1: Build dependencies
+FROM composer:2 as dependencies
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --no-autoloader --ignore-platform-reqs
+
+# Stage 2: Production image
 FROM php:8.2-cli-alpine
 
-# Installa le dipendenze di sistema minime necessarie
-RUN apk add --no-cache unzip zip git procps netcat-openbsd
+# Installa dipendenze essenziali in un solo comando per velocizzare
+RUN apk add --no-cache \
+    postgresql-dev \
+    && docker-php-ext-install pdo pdo_mysql \
+    && apk del postgresql-dev
 
-# Installa le estensioni PHP necessarie
-RUN docker-php-ext-install pdo pdo_mysql zip
-
-# Installa Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Imposta la cartella di lavoro
+# Copia le dipendenze dal primo stage
 WORKDIR /app
-
-# Copia solo i file di composer e installa le dipendenze
-# Questo ottimizza la cache di Docker
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-interaction --optimize-autoloader
-
-# Copia il resto del codice dell'applicazione
+COPY --from=dependencies /app/vendor vendor/
 COPY . .
 
-# Copia lo script di avvio e rendilo eseguibile
-COPY entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# Genera l'autoloader ottimizzato
+RUN composer dump-autoload --optimize --no-dev
 
-# Imposta lo script come punto di ingresso del container
-ENTRYPOINT ["entrypoint.sh"]
+# Esponi la porta
+EXPOSE 8080
+
+# Comando di avvio diretto (senza entrypoint.sh per ora)
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
