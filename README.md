@@ -194,12 +194,6 @@ You can also deploy this project to a traditional server (like a VPS or shared h
 
 ### Current Production API
 
-The production version of this API is hosted at:
-
-```
-https://api-booking-fields.up.railway.app
-```
-
 Production API documentation:
 
 ```
