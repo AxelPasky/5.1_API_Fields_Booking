@@ -49,7 +49,9 @@ class FieldController extends Controller
     /**
      * Get field availability
      *
-     * Returns available time slots for the field on the specified date.
+     * Returns a list of available time slots for a specific field and date.
+     * @urlParam field integer required The ID of the field. Example: 1
+     * @queryParam date string required The date to check for availability. Format: YYYY-MM-DD.
      */
     public function getAvailability(Request $request, Field $field)
     {
@@ -60,19 +62,24 @@ class FieldController extends Controller
         $date = Carbon::parse($validated['date'])->startOfDay();
 
        
+        if ($date->isPast()) {
+            return response()->json(['data' => []]); 
+        }
+
         $bookingsOnDate = Booking::where('field_id', $field->id)
             ->whereDate('start_time', $date)
+            ->where('status', '!=', 'cancelled')
             ->get();
 
-
-        $openingTime = $date->copy()->hour(8);
+        $openingTime = $date->copy()->hour(9);
         $closingTime = $date->copy()->hour(22);
-        $slotDurationMinutes = 60;
+        $slotDurationMinutes = 60; 
 
-        $timeSlots = [];
+        $availableSlots = [];
         $currentTime = $openingTime->copy();
 
-        while ($currentTime < $closingTime) {
+        while ($currentTime->copy()->addMinutes($slotDurationMinutes) <= $closingTime) {
+            $slotStart = $currentTime->copy();
             $slotEnd = $currentTime->copy()->addMinutes($slotDurationMinutes);
             $isAvailable = true;
 
@@ -80,21 +87,21 @@ class FieldController extends Controller
                 $bookingStart = Carbon::parse($booking->start_time);
                 $bookingEnd = Carbon::parse($booking->end_time);
 
-                
-                if ($currentTime < $bookingEnd && $slotEnd > $bookingStart) {
+                if ($slotStart < $bookingEnd && $slotEnd > $bookingStart) {
                     $isAvailable = false;
                     break;
                 }
             }
 
-            $timeSlots[] = [
-                'time' => $currentTime->format('H:i'),
-                'available' => $isAvailable,
-            ];
-
-            $currentTime->addMinutes($slotDurationMinutes);
+            if ($isAvailable) {
+     
+                $availableSlots[] = $slotStart->toDateTimeString();
+            }
+            
+           
+            $currentTime->addMinutes(30);
         }
 
-        return response()->json(['data' => $timeSlots]);
+        return response()->json(['data' => $availableSlots]);
     }
 }
