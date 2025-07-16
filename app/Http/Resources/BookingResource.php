@@ -23,6 +23,7 @@ class BookingResource extends JsonResource
             'total_price' => $this->total_price,
             'status' => $this->status,
             'created_at' => $this->created_at->toDateTimeString(),
+            'field' => new FieldResource($this->whenLoaded('field')),
         ];
     }
 }
