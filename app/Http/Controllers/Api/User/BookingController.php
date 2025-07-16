@@ -76,12 +76,15 @@ class BookingController extends Controller
 
         $booking = Booking::create([
             'user_id' => $request->user()->id,
-            'field_id' => $field->id,
+            'field_id' => $validatedData['field_id'],
             'start_time' => $start,
             'end_time' => $end,
             'total_price' => $totalPrice,
-            'status' => 'confirmed', 
+            'status' => 'confirmed',
         ]);
+
+        // MODIFICA: Carica la relazione 'field' sul modello appena creato
+        $booking->load('field');
 
         return new BookingResource($booking);
     }
