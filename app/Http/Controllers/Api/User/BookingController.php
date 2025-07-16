@@ -48,31 +48,26 @@ class BookingController extends Controller
         $start = Carbon::parse($validatedData['start_time']);
         $end = Carbon::parse($validatedData['end_time']);
 
-       
-        if (!$field->is_available) {
-            throw ValidationException::withMessages([
-                'field_id' => 'The selected field is not available for booking.',
-            ]);
-        }
-
-     
+        // MODIFICA: Logica di validazione per le sovrapposizioni
         $existingBooking = Booking::where('field_id', $field->id)
             ->where(function ($query) use ($start, $end) {
                 $query->where(function ($q) use ($start, $end) {
+                    // La nuova prenotazione inizia durante una esistente
                     $q->where('start_time', '<', $end)
                       ->where('end_time', '>', $start);
                 });
-            })->exists();
+            })
+            ->exists(); // È più efficiente usare exists()
 
         if ($existingBooking) {
             throw ValidationException::withMessages([
-                'start_time' => 'The selected time slot is no longer available.',
+                'start_time' => 'One or more of the selected time slots are no longer available.',
             ]);
         }
 
-      
-        $durationInHours = $start->diffInMinutes($end) / 60;
-        $totalPrice = $durationInHours * $field->price_per_hour;
+        // Calcolo del prezzo basato sulla durata effettiva
+        $durationInMinutes = $start->diffInMinutes($end);
+        $totalPrice = ($durationInMinutes / 60) * $field->price_per_hour;
 
         $booking = Booking::create([
             'user_id' => $request->user()->id,
